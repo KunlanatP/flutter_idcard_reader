@@ -1,0 +1,29 @@
+{
+    "helloWorld": "สวัสดีชาวโลก!",
+    "exit_app_message": "คุณต้องการที่จะออกจากแอป?",
+    "ok_message": "ตกลง",
+    "cancle_message": "ยกเลิก",
+    "yes_message": "ใช่",
+    "no_message": "ไม่ใช่",
+    "or_txt": "หรือ",
+
+    "welcome_title": "ยินดีต้อนรับ!",
+    "sign_in_to_continue_title": "ลงชื่อเข้าใช้เพื่อดำเนินการต่อ",
+
+    "username_or_email_title": "ชื่อผู้ใช้ (อีเมล) :",
+    "username_or_email_hint": "เช่น example@gmail.com",
+
+    "password_title": "รหัสผ่าน :",
+    "password_hint": "ป้อนรหัสผ่าน",
+
+    "forgot_password": "ลืมรหัสผ่าน?",
+    "btn_sign_in": "เข้าสู่ระบบ",
+    "btn_sign_in_with_facebook": "เข้าสู่ระบบด้วย Facebook",
+    "btn_sign_in_with_google": "เข้าสู่ระบบด้วย Google",
+    "btn_sign_up_with_facebook": "สร้างบัญชีด้วย Facebook",
+    "btn_sign_up_with_google": "สร้างบัญชีด้วย Google",
+    "btn_sign_up": "สมัคร",
+
+    "no_account_label": "ไม่มีบัญชีผู้ใช้?",
+    "have_an_account_label": "มีบัญชีแล้ว?"
+}

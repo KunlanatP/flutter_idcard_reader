@@ -1,0 +1,29 @@
+{
+    "helloWorld": "Hello World!",
+    "exit_app_message": "Do you want to exit?",
+    "ok_message": "OK",
+    "cancle_message": "Cancle",
+    "yes_message": "Yes",
+    "no_message": "No",
+    "or_txt": "or",
+
+    "welcome_title": "Welcome!",
+    "sign_in_to_continue_title": "Sign in to continue",
+
+    "username_or_email_title": "Username (email) :",
+    "username_or_email_hint": "e.g. example@gmail.com",
+
+    "password_title": "Password :",
+    "password_hint": "Enter password",
+
+    "forgot_password": "Forgot password?",
+    "btn_sign_in": "Sign in",
+    "btn_sign_in_with_facebook": "Sign in with Facebook",
+    "btn_sign_in_with_google": "Sign in with Google",
+    "btn_sign_up_with_facebook": "Sign up with Facebook",
+    "btn_sign_up_with_google": "Sign up with Google",
+    "btn_sign_up": "Sign up",
+
+    "no_account_label": "Don’t have an account ?",
+    "have_an_account_label": "Have an account ?"
+}
