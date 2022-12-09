@@ -1,20 +1,34 @@
 {
     "helloWorld": "สวัสดีชาวโลก!",
+    "english_code": "อังกฤษ",
+    "thai_code": "ไทย",
     "exit_app_message": "คุณต้องการที่จะออกจากแอป?",
     "ok_message": "ตกลง",
     "cancle_message": "ยกเลิก",
     "yes_message": "ใช่",
     "no_message": "ไม่ใช่",
     "or_txt": "หรือ",
+    "location_text": "ตำแหน่งที่ตั้ง",
 
     "welcome_title": "ยินดีต้อนรับ!",
     "sign_in_to_continue_title": "ลงชื่อเข้าใช้เพื่อดำเนินการต่อ",
-
+    "hi_title": "สวัสดี!",
+    "create_a_new_account_title": "สร้างบัญชีใหม่",
+    "no_account_label": "ไม่มีบัญชีผู้ใช้?",
+    "have_an_account_label": "มีบัญชีแล้ว?",
     "username_or_email_title": "ชื่อผู้ใช้ (อีเมล) :",
-    "username_or_email_hint": "เช่น example@gmail.com",
-
     "password_title": "รหัสผ่าน :",
+    "confirm_password_title": "ยืนยันรหัสผ่าน :",
+    "email_title": "อีเมล :",
+    "firstname_title": "ชื่อ",
+    "lastname_title": "นามสกุล",
+    "phone_number_title": "เบอร์โทรศัพท์",
+
+    "username_or_email_hint": "เช่น example@gmail.com",
     "password_hint": "ป้อนรหัสผ่าน",
+    "firstname_hint": "เช่น แฮร์รี่พอตเตอร์",
+    "lastname_hint": "เช่น พอตเตอร์",
+    "phone_number_hint": "เช่น 0981234567",
 
     "forgot_password": "ลืมรหัสผ่าน?",
     "btn_sign_in": "เข้าสู่ระบบ",
@@ -23,7 +37,15 @@
     "btn_sign_up_with_facebook": "สร้างบัญชีด้วย Facebook",
     "btn_sign_up_with_google": "สร้างบัญชีด้วย Google",
     "btn_sign_up": "สมัคร",
+    "btn_confirm": "ยืนยัน",
+    "btn_next": "ถัดไป",
+    "btn_back": "กลับ",
+    "btn_read": "อ่าน",
+    "btn_setting": "ตั้งค่า",
 
-    "no_account_label": "ไม่มีบัญชีผู้ใช้?",
-    "have_an_account_label": "มีบัญชีแล้ว?"
+    "connect_smart_card_reader": "กรุณาเสียบเครื่องอ่านบัตร",
+    "insert_idcard": "กรุณาเสียบบัตรประชาชน",
+    "location_text": "ตำแหน่งที่ตั้ง",
+    "card_reader_text": "อ่านบัตรประชาชน",
+    "text_view_more": "ดูเพิ่มเติม ..."
 }

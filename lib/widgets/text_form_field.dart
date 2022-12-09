@@ -1,42 +1,65 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_idcard_reader/themes/colors.dart';
+import 'package:flutter/services.dart';
 
-class CustomTextFormField extends StatefulWidget {
-  final String? defaultValue;
-  final double? width;
-  final String? labelText;
-  final String? hintText;
-  // final String? helperText;
-  // final String? counterText;
-  final Widget? icon;
-  final Widget? prefixIcon;
-  final Widget? suffixIcon;
-  final Color? fillColor;
-  final bool filled;
-  final ValueChanged<String>? onChanged;
+import 'package:flutter_idcard_reader/widgets/custom_on_click.dart';
 
-  const CustomTextFormField({
+enum InputTypes { text, number }
+
+class FormTextInput extends StatefulWidget {
+  const FormTextInput({
     Key? key,
-    this.defaultValue = '',
-    this.width,
-    this.labelText,
-    this.hintText,
-    // this.helperText,
-    // this.counterText,
-    this.icon,
-    this.prefixIcon,
-    this.suffixIcon,
-    this.fillColor,
-    this.filled = true,
     this.onChanged,
+    this.onSubmitted,
+    this.defaultValue = '',
+    this.type = InputTypes.text,
+    this.suffixLabel,
+    this.hintText,
+    this.helperText,
+    this.autoFocus = false,
+    this.errorText,
+    this.autoChange = false,
+    this.readOnly = false,
+    this.maxLines = 1,
+    this.minLines,
+    this.obscureText = false,
+    this.fillTextField,
+    this.borderColor,
+    this.hoverColor,
+    this.suffixContent,
+    this.clearTextIcon = false,
+    this.width,
+    this.height,
   }) : super(key: key);
 
+  final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
+  final String? defaultValue;
+  final InputTypes type;
+  final String? suffixLabel;
+  final String? hintText;
+  final String? helperText;
+  final bool autoFocus;
+  final String? errorText;
+  final bool autoChange;
+  final bool readOnly;
+  final int? maxLines;
+  final int? minLines;
+  final Color? fillTextField;
+  final Color? borderColor;
+  final Color? hoverColor;
+  final Widget? suffixContent;
+  final bool obscureText;
+  final bool clearTextIcon;
+  final double? width;
+  final double? height;
+
   @override
-  State<CustomTextFormField> createState() => _CustomTextFormFieldState();
+  State<FormTextInput> createState() => _FormTextInputState();
 }
 
-class _CustomTextFormFieldState extends State<CustomTextFormField> {
+class _FormTextInputState extends State<FormTextInput> {
   late TextEditingController _textController;
   @override
   void initState() {
@@ -53,50 +76,87 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     final inputDecoration = InputDecoration(
-      filled: widget.filled,
-      fillColor: widget.fillColor ?? Colors.transparent,
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          width: 1.5,
-          color: theme.primaryColor,
-        ),
-      ),
-      enabledBorder: const OutlineInputBorder(
-        borderSide: BorderSide(color: textFieldBorder, width: 1.5),
-      ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-      labelText: widget.labelText,
-      labelStyle: theme.textTheme.bodyText2,
       hintText: widget.hintText,
-      hintStyle: theme.textTheme.bodyText2?.merge(
-        const TextStyle(color: textFieldBorder),
-      ),
-      // helperText: widget.helperText,
-      // counterText: widget.counterText,
-      icon: widget.icon,
-      prefixIcon: widget.prefixIcon,
-      suffixIcon: widget.suffixIcon,
+      helperText: widget.helperText,
+      hintStyle: theme.textTheme.bodyText2!
+          .merge(const TextStyle(color: Color(0xFF7E7E7E))),
+      errorText: widget.errorText,
+      border: const OutlineInputBorder(),
+      enabledBorder: widget.borderColor != null
+          ? OutlineInputBorder(
+              borderSide: BorderSide(color: widget.borderColor!))
+          : const OutlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFFC8C8C8))),
+      focusedBorder: widget.readOnly && widget.borderColor != null
+          ? OutlineInputBorder(
+              borderSide: BorderSide(color: widget.borderColor!))
+          : null,
+      contentPadding: const EdgeInsets.all(10),
+      fillColor: widget.fillTextField,
+      hoverColor: widget.readOnly ? Colors.transparent : widget.hoverColor,
+      suffixIconConstraints: const BoxConstraints(maxWidth: 68, minWidth: 32),
+      suffixIcon: widget.suffixLabel != null
+          ? Container(
+              padding: const EdgeInsets.only(left: 4, right: 6),
+              child: Text(
+                widget.suffixLabel!,
+                textAlign: TextAlign.right,
+                style: theme.textTheme.button?.merge(
+                  const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 11,
+                    letterSpacing: -0.22,
+                  ),
+                ),
+              ),
+            )
+          : widget.suffixContent ??
+              (widget.clearTextIcon
+                  ? (_textController.text == ''
+                      ? null
+                      : UICustomOnClick(
+                          child: const Icon(
+                            FluentIcons.dismiss_24_regular,
+                            size: 16,
+                          ),
+                          onTap: () {
+                            setState(() => _textController.clear());
+                          },
+                        ))
+                  : null),
     );
 
-    Widget child = TextFormField(
-      controller: _textController,
-      decoration: inputDecoration,
-      style: theme.textTheme.bodyText2?.merge(
-        const TextStyle(color: textColor),
-      ),
-      onChanged: widget.onChanged,
-    );
-
-    if (widget.width != null) {
-      child = SizedBox(
-        width: widget.width,
-        height: 32,
-        child: child,
-      );
+    if (widget.autoChange) {
+      _textController = TextEditingController(text: widget.defaultValue);
     }
 
-    return child;
+    return SizedBox(
+      height: widget.maxLines! > 1
+          ? null
+          : widget.helperText != null || widget.errorText != null
+              ? 54
+              : widget.height ?? 32,
+      width: widget.width,
+      child: TextField(
+        readOnly: widget.readOnly,
+        maxLines: widget.maxLines,
+        minLines: widget.minLines,
+        controller: _textController,
+        style: theme.textTheme.bodyText2,
+        keyboardType: widget.type == InputTypes.number
+            ? const TextInputType.numberWithOptions(decimal: true)
+            : null,
+        inputFormatters: [
+          if (widget.type == InputTypes.number)
+            FilteringTextInputFormatter.digitsOnly
+        ],
+        obscureText: widget.obscureText,
+        decoration: inputDecoration,
+        onChanged: widget.onChanged,
+        autofocus: widget.autoFocus,
+        onSubmitted: widget.onSubmitted,
+      ),
+    );
   }
 }

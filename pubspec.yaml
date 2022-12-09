@@ -13,16 +13,26 @@ dependencies:
     sdk: flutter
   flutter_localizations: 
     sdk: flutter         
+  thai_idcard_reader_flutter:
+    path: pkgs/thai_idcard_reader_flutter
 
   cupertino_icons: ^1.0.2
   google_fonts: ^3.0.1
   font_awesome_flutter: ^10.2.1
-  iconly: ^1.0.1
-  ionicons: ^0.2.1
-  iconsax: ^0.0.8
+  fluentui_system_icons: ^1.1.188
+
+  zoom_widget: ^2.0.0
+  flip_card: ^0.6.0
+  lottie: ^1.4.3
+  flutter_native_splash: ^2.2.12
 
   intl: ^0.17.0
   shared_preferences: ^2.0.15
+  page_transition: ^2.0.9
+  geocoding: ^2.0.5
+  geolocator: ^9.0.2
+  drop_shadow: ^0.0.2+1
+  image_picker: ^0.8.6
 
 dev_dependencies:
   flutter_test:

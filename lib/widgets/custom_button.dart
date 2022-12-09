@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class CustomTextButton extends StatefulWidget {
+class CustomTextButtonWidget extends StatefulWidget {
   final String text;
   final VoidCallback? onPressed;
   final TextStyle? textStyle;
   final Color? textColor;
 
-  const CustomTextButton({
+  const CustomTextButtonWidget({
     super.key,
     required this.text,
     this.onPressed,
@@ -16,10 +16,10 @@ class CustomTextButton extends StatefulWidget {
   });
 
   @override
-  State<CustomTextButton> createState() => _CustomTextButtonState();
+  State<CustomTextButtonWidget> createState() => _CustomTextButtonWidgetState();
 }
 
-class _CustomTextButtonState extends State<CustomTextButton> {
+class _CustomTextButtonWidgetState extends State<CustomTextButtonWidget> {
   bool isHovered = false;
 
   @override
@@ -76,11 +76,15 @@ class CustomButtonWidget extends StatelessWidget {
     this.icon,
     required this.label,
     this.onPressed,
+    this.color,
+    this.labelStyle,
   });
 
   final FaIcon? icon;
   final String label;
   final void Function()? onPressed;
+  final Color? color;
+  final TextStyle? labelStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -88,26 +92,34 @@ class CustomButtonWidget extends StatelessWidget {
 
     if (icon != null) {
       return ElevatedButton.icon(
-        onPressed: () {},
+        onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           minimumSize: const Size(double.infinity, 42),
           maximumSize: const Size(double.infinity, 42),
-          backgroundColor: _fillColor,
-          side: const BorderSide(color: _strokeColor),
+          backgroundColor: color ?? _fillColor,
+          side: BorderSide(color: color ?? _strokeColor),
         ),
         icon: icon!,
         label: Text(
           label,
-          style: theme.textTheme.subtitle1!.copyWith(color: _textColor),
+          style: labelStyle ??
+              theme.textTheme.subtitle1!.copyWith(color: _textColor),
         ),
       );
     }
 
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        minimumSize: const Size(double.infinity, 42),
+        maximumSize: const Size(double.infinity, 42),
+        backgroundColor: color ?? _fillColor,
+        side: BorderSide(color: color ?? _strokeColor),
+      ),
       child: Text(
         label,
-        style: theme.textTheme.subtitle1!.copyWith(color: _textColor),
+        style: labelStyle ??
+            theme.textTheme.subtitle1!.copyWith(color: _textColor),
       ),
     );
   }
