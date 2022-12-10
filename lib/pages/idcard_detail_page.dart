@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:drop_shadow/drop_shadow.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
@@ -6,10 +8,12 @@ import 'package:flutter_idcard_reader/themes/colors.dart';
 import 'package:flutter_idcard_reader/utils/format_date.dart';
 import 'package:flutter_idcard_reader/utils/gender_convert.dart';
 import 'package:flutter_idcard_reader/widgets/btn_language.dart';
+import 'package:flutter_idcard_reader/widgets/custom_on_click.dart';
 import 'package:flutter_idcard_reader/widgets/geolocator_widget.dart';
 import 'package:flutter_idcard_reader/widgets/text_form_field.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:thai_idcard_reader_flutter/thai_idcard_reader_flutter.dart';
 
 class IDCardDetailPage extends StatefulWidget {
@@ -21,6 +25,25 @@ class IDCardDetailPage extends StatefulWidget {
 }
 
 class _IDCardDetailPageState extends State<IDCardDetailPage> {
+  final imagePicker = ImagePicker();
+
+  List<XFile>? imageFileList = [];
+
+  Future<void> selectImages() async {
+    final selectedImages = await imagePicker.pickMultiImage();
+    if (selectedImages.isNotEmpty) {
+      imageFileList?.addAll(selectedImages);
+    }
+    setState(() {});
+  }
+
+  Future<void> cameraImages() async {
+    final image = await imagePicker.pickImage(source: ImageSource.camera);
+    if (image == null) return;
+    imageFileList?.add(image);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -45,6 +68,20 @@ class _IDCardDetailPageState extends State<IDCardDetailPage> {
     );
 
     final appBarHeight = appBar.preferredSize.height;
+
+    Future<void> showAlertDialog({Widget? content}) => showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              contentPadding: const EdgeInsets.only(),
+              content: SizedBox(
+                height: height / 2,
+                width: width < 390 ? width : 390,
+                child: content,
+              ),
+            );
+          },
+        );
 
     return LayoutBuilder(
       builder: (context, constraints) => Scaffold(
@@ -81,23 +118,17 @@ class _IDCardDetailPageState extends State<IDCardDetailPage> {
                               color: Colors.blueAccent.withAlpha(200),
                             ),
                             child: IconButton(
-                              onPressed: () => showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    contentPadding: const EdgeInsets.only(),
-                                    content: widget.thaiIDCard?.photo == null
-                                        ? Image.asset(
-                                            'assets/images/default.png',
-                                            fit: BoxFit.fitWidth,
-                                          )
-                                        : Image.memory(
-                                            Uint8List.fromList(
-                                                widget.thaiIDCard!.photo),
-                                            fit: BoxFit.fitWidth,
-                                          ),
-                                  );
-                                },
+                              onPressed: () => showAlertDialog(
+                                content: widget.thaiIDCard?.photo == null
+                                    ? Image.asset(
+                                        'assets/images/default.png',
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image.memory(
+                                        Uint8List.fromList(
+                                            widget.thaiIDCard!.photo),
+                                        fit: BoxFit.cover,
+                                      ),
                               ),
                               icon: const Icon(FluentIcons.search_32_filled),
                             ),
@@ -160,7 +191,7 @@ class _IDCardDetailPageState extends State<IDCardDetailPage> {
                     children: [
                       Expanded(
                         child: OutlinedButton.icon(
-                          onPressed: () {},
+                          onPressed: () => cameraImages(),
                           icon: const FaIcon(FontAwesomeIcons.camera),
                           label: const Text('กล้อง'),
                           style: OutlinedButton.styleFrom(
@@ -171,7 +202,7 @@ class _IDCardDetailPageState extends State<IDCardDetailPage> {
                       const SizedBox(width: 20),
                       Expanded(
                         child: OutlinedButton.icon(
-                          onPressed: () {},
+                          onPressed: () => selectImages(),
                           icon: const FaIcon(FontAwesomeIcons.image),
                           label: const Text('รูปภาพ'),
                         ),
@@ -181,13 +212,59 @@ class _IDCardDetailPageState extends State<IDCardDetailPage> {
                   const SizedBox(height: 15),
                   Container(
                     height: 200,
+                    width: constraints.maxWidth < 390 ? width : 390,
                     color: Colors.grey,
+                    padding: const EdgeInsets.all(10),
+                    child: imageFileList!.isNotEmpty
+                        ? GridView.builder(
+                            itemCount: imageFileList?.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3,
+                                    crossAxisSpacing: 10,
+                                    mainAxisSpacing: 10),
+                            itemBuilder: (context, index) {
+                              return UICustomOnClick(
+                                onTap: () => showAlertDialog(
+                                  content: Stack(
+                                    children: [
+                                      Image.file(
+                                        File(imageFileList![index].path),
+                                        width: width,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      Align(
+                                        alignment: const Alignment(0.9, -1.0),
+                                        child: ElevatedButton.icon(
+                                          onPressed: () {},
+                                          icon: const Icon(
+                                            FluentIcons.delete_24_regular,
+                                          ),
+                                          label: const Text('DELETE'),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: Image.file(
+                                    File(imageFileList![index].path),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                        : Container(),
                   ),
                   const SizedBox(height: 15),
                   SizedBox(
                     width: constraints.maxWidth < 390 ? width : 390,
                     child: ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        print(imageFileList?.length);
+                      },
                       icon: const FaIcon(FontAwesomeIcons.floppyDisk),
                       label: const Text('บันทึก'),
                     ),
@@ -235,14 +312,13 @@ class _IDCardDetailPageState extends State<IDCardDetailPage> {
     );
   }
 
-  Widget buildFormInputWidget({
-    String? subTitle,
-    String? value,
-    int? minLines,
-    int? maxLines = 1,
-    int subTitleFlex = 5,
-    int valueFlex = 6,
-  }) {
+  Widget buildFormInputWidget(
+      {String? subTitle,
+      String? value,
+      int? minLines,
+      int? maxLines = 1,
+      int subTitleFlex = 5,
+      int valueFlex = 6}) {
     final theme = Theme.of(context);
 
     return Row(
