@@ -1,24 +1,34 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:drop_shadow/drop_shadow.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_idcard_reader/models/model.dart';
 import 'package:flutter_idcard_reader/themes/colors.dart';
 import 'package:flutter_idcard_reader/utils/format_date.dart';
 import 'package:flutter_idcard_reader/utils/gender_convert.dart';
 import 'package:flutter_idcard_reader/widgets/btn_language.dart';
 import 'package:flutter_idcard_reader/widgets/custom_on_click.dart';
-import 'package:flutter_idcard_reader/widgets/geolocator_widget.dart';
 import 'package:flutter_idcard_reader/widgets/text_form_field.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:thai_idcard_reader_flutter/thai_idcard_reader_flutter.dart';
 
+import '../futures/geocoding_feature.dart';
+
 class IDCardDetailPage extends StatefulWidget {
   final ThaiIDCard? thaiIDCard;
-  const IDCardDetailPage({super.key, required this.thaiIDCard});
+  final Position? position;
+
+  const IDCardDetailPage({
+    super.key,
+    required this.thaiIDCard,
+    required this.position,
+  });
 
   @override
   State<IDCardDetailPage> createState() => _IDCardDetailPageState();
@@ -26,6 +36,7 @@ class IDCardDetailPage extends StatefulWidget {
 
 class _IDCardDetailPageState extends State<IDCardDetailPage> {
   final imagePicker = ImagePicker();
+  final _mobileTxt = TextEditingController();
 
   List<XFile>? imageFileList = [];
 
@@ -185,7 +196,28 @@ class _IDCardDetailPageState extends State<IDCardDetailPage> {
                     valueFlex: 9,
                   ),
                   const SizedBox(height: 15),
-                  _buildNumberInput(theme),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'เบอร์โทรศัพท์ :',
+                        style: theme.textTheme.subtitle1!.merge(
+                          const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                            color: textColorTitle,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      TextField(
+                        controller: _mobileTxt,
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                        ),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 15),
                   Row(
                     children: [
@@ -263,7 +295,19 @@ class _IDCardDetailPageState extends State<IDCardDetailPage> {
                     width: constraints.maxWidth < 390 ? width : 390,
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        print(imageFileList?.length);
+                        var personData = ThaiIDCard().toResponse(
+                          idCard: widget.thaiIDCard,
+                          mobilePhone: _mobileTxt.text,
+                        );
+                        final newData = IDCardDetailModel(
+                          userId: 'userId',
+                          personData: personData,
+                          location: LocationModel(
+                            latitude: widget.position!.latitude,
+                            longitude: widget.position!.longitude,
+                          ),
+                        );
+                        print(jsonEncode(newData));
                       },
                       icon: const FaIcon(FontAwesomeIcons.floppyDisk),
                       label: const Text('บันทึก'),
@@ -283,32 +327,7 @@ class _IDCardDetailPageState extends State<IDCardDetailPage> {
             ),
           ),
         ),
-        bottomNavigationBar: const GeolocatorWidget(),
       ),
-    );
-  }
-
-  Column _buildNumberInput(ThemeData theme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'เบอร์โทรศัพท์ :',
-          style: theme.textTheme.subtitle1!.merge(
-            const TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-              color: textColorTitle,
-            ),
-          ),
-        ),
-        const SizedBox(height: 5),
-        const FormTextInput(
-          height: 42,
-          defaultValue: '',
-          hintText: 'Please enter your phone number',
-        ),
-      ],
     );
   }
 

@@ -7,10 +7,16 @@ import 'package:flutter_idcard_reader/constants/language.dart';
 import 'package:flutter_idcard_reader/pages/empty_header.dart';
 import 'package:flutter_idcard_reader/pages/idcard_detail_page.dart';
 import 'package:flutter_idcard_reader/pages/idcard_view_page.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:thai_idcard_reader_flutter/thai_idcard_reader_flutter.dart';
 
 class IDCardPage extends StatefulWidget {
-  const IDCardPage({super.key});
+  final Position? position;
+
+  const IDCardPage({
+    super.key,
+    required this.position,
+  });
 
   @override
   State<IDCardPage> createState() => _IDCardPageState();
@@ -113,6 +119,7 @@ class _IDCardPageState extends State<IDCardPage> {
                       MaterialPageRoute(
                         builder: (context) => IDCardDetailPage(
                           thaiIDCard: _data,
+                          position: widget.position,
                         ),
                       ),
                     );

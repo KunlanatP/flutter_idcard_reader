@@ -10,6 +10,11 @@
         android:label="flutter_idcard_reader"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <!-- YOUR KEY HERE -->
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBB5X88OTh7hRfmY3B_UlySifkW7oQFONU" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -23,12 +28,12 @@
                  while the Flutter UI initializes. After that, this theme continues
                  to determine the Window background behind the Flutter UI. -->
             <meta-data
-              android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/NormalTheme"
-              />
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/NormalTheme"
+            />
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

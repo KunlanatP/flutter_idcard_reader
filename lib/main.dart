@@ -6,6 +6,7 @@ import 'package:flutter_idcard_reader/pages/login.dart';
 import 'package:flutter_idcard_reader/pages/read_card.dart';
 import 'package:flutter_idcard_reader/pages/register.dart';
 import 'package:flutter_idcard_reader/pages/setting.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thai_idcard_reader_flutter/thai_idcard_reader_flutter.dart';
 
@@ -25,7 +26,7 @@ final mockData = ThaiIDCard(
 );
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -92,12 +93,12 @@ class _MyAppState extends State<MyApp> {
               type: PageTransitionType.fade,
               settings: settings,
             );
-          case '/read-card':
-            return PageTransition(
-              child: const ReadCardPage(),
-              type: PageTransitionType.fade,
-              settings: settings,
-            );
+          // case '/read-card':
+          //   return PageTransition(
+          //     child: const ReadCardPage(),
+          //     type: PageTransitionType.fade,
+          //     settings: settings,
+          //   );
           default:
             return null;
         }

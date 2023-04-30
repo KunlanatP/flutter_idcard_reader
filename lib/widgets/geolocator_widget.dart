@@ -1,22 +1,39 @@
-import 'dart:async';
+import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'package:flutter_idcard_reader/constants/language.dart';
-
-class GeolocatorWidget extends StatefulWidget {
-  const GeolocatorWidget({super.key});
-
-  @override
-  State<GeolocatorWidget> createState() => _GeolocatorWidgetState();
+enum PositionItemType {
+  log,
+  position,
 }
 
-class _GeolocatorWidgetState extends State<GeolocatorWidget> {
-  Position? _currentPosition;
-  String? _currentAddress;
+class PositionItem {
+  PositionItem(this.type, this.displayValue);
+
+  final PositionItemType type;
+  final String displayValue;
+}
+
+typedef PositionCallback = void Function(Position position);
+
+class MapsWidget extends StatefulWidget {
+  final PositionCallback? positionCallback;
+
+  const MapsWidget({super.key, this.positionCallback});
+
+  @override
+  State<MapsWidget> createState() => _MapsWidgetState();
+}
+
+class _MapsWidgetState extends State<MapsWidget> {
+  var mapmarker = HashSet<Marker>();
+  CameraPosition _initialCameraPosition = const CameraPosition(
+    target: LatLng(17.0761884, 102.9304118),
+    zoom: 17,
+  );
+  late GoogleMapController _googleMapController;
 
   static const String _kLocationServicesDisabledMessage =
       'Location services are disabled.';
@@ -26,12 +43,18 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   static const String _kPermissionGrantedMessage = 'Permission granted.';
 
   final GeolocatorPlatform geolocatorAndroid = GeolocatorPlatform.instance;
-  _PositionItem? _positionItem;
+  PositionItem? _positionItem;
 
   @override
   void initState() {
-    super.initState();
     _getCurrentPosition();
+    super.initState();
+  }
+
+  @override
+  void deactivate() {
+    _googleMapController.dispose();
+    super.deactivate();
   }
 
   Future<void> _getCurrentPosition() async {
@@ -43,29 +66,24 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
     final position = await geolocatorAndroid.getCurrentPosition();
     setState(() {
-      _currentPosition = position;
+      mapmarker.add(
+        Marker(
+          markerId: const MarkerId('1'),
+          position: LatLng(position.latitude, position.longitude),
+        ),
+      );
+      _initialCameraPosition = CameraPosition(
+        target: LatLng(position.latitude, position.longitude),
+        zoom: 17,
+      );
     });
-    _getAddressFromLatLng();
+
     _updatePositionList(
-      _PositionItemType.position,
+      PositionItemType.position,
       position.toString(),
     );
-  }
 
-  Future<void> _getAddressFromLatLng() async {
-    try {
-      if (_currentPosition != null) {
-        List<Placemark> p = await placemarkFromCoordinates(
-            _currentPosition!.latitude, _currentPosition!.longitude);
-        Placemark place = p[0];
-        setState(() {
-          _currentAddress =
-              "${place.locality}, ${place.postalCode}, ${place.country}";
-        });
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-    }
+    widget.positionCallback?.call(position);
   }
 
   Future<bool> _handlePermission() async {
@@ -79,7 +97,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       // accessing the position and request users of the
       // App to enable the location services.
       _updatePositionList(
-        _PositionItemType.log,
+        PositionItemType.log,
         _kLocationServicesDisabledMessage,
       );
 
@@ -96,7 +114,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
         _updatePositionList(
-          _PositionItemType.log,
+          PositionItemType.log,
           _kPermissionDeniedMessage,
         );
 
@@ -107,7 +125,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
       _updatePositionList(
-        _PositionItemType.log,
+        PositionItemType.log,
         _kPermissionDeniedForeverMessage,
       );
 
@@ -117,90 +135,58 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     _updatePositionList(
-      _PositionItemType.log,
+      PositionItemType.log,
       _kPermissionGrantedMessage,
     );
     return true;
   }
 
-  void _updatePositionList(_PositionItemType type, String displayValue) {
-    _positionItem = _PositionItem(type, displayValue);
+  void _updatePositionList(PositionItemType type, String displayValue) {
+    _positionItem = PositionItem(type, displayValue);
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+
     if (_positionItem == null) {
-      return const Scaffold(body: Center(child: Text('No Position')));
+      return const Text('No Position');
     }
 
-    return Container(
-      height: 60,
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            offset: const Offset(0, -2),
-            color: Colors.grey.shade400,
-            blurRadius: 4,
+    return SizedBox(
+      width: screenSize.width,
+      height: screenSize.height * 0.3,
+      child: Stack(
+        children: [
+          GoogleMap(
+            mapType: MapType.hybrid,
+            initialCameraPosition: _initialCameraPosition,
+            onMapCreated: (controller) => _googleMapController = controller,
+            markers: mapmarker,
+          ),
+          Align(
+            alignment: const Alignment(0.95, -0.95),
+            child: InkWell(
+              onTap: () => _googleMapController.animateCamera(
+                CameraUpdate.newCameraPosition(_initialCameraPosition),
+              ),
+              child: Container(
+                width: 48,
+                height: 48,
+                decoration: ShapeDecoration(
+                  color: Colors.grey.shade300.withAlpha(210),
+                  shape: const CircleBorder(),
+                ),
+                child: Icon(
+                  Icons.center_focus_strong,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+            ),
           ),
         ],
       ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              children: <Widget>[
-                const Icon(
-                  Icons.location_on,
-                  color: Colors.redAccent,
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        translation(context).location_text,
-                        style: GoogleFonts.inter(
-                          color: Colors.grey.shade600,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      if (_currentPosition != null && _currentAddress != null)
-                        Text(
-                          _currentAddress ?? '',
-                          style: GoogleFonts.inter(
-                            color: const Color(0xFF333335),
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
     );
   }
-}
-
-enum _PositionItemType {
-  log,
-  position,
-}
-
-class _PositionItem {
-  _PositionItem(this.type, this.displayValue);
-
-  final _PositionItemType type;
-  final String displayValue;
 }

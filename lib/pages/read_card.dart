@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_idcard_reader/pages/idcard.dart';
 import 'package:flutter_idcard_reader/widgets/btn_language.dart';
-import 'package:flutter_idcard_reader/widgets/geolocator_widget.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ReadCardPage extends StatelessWidget {
-  const ReadCardPage({super.key});
+  final Position? position;
+
+  const ReadCardPage({
+    super.key,
+    required this.position,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +31,9 @@ class ReadCardPage extends StatelessWidget {
         ),
         actions: const [LanguageButtonWidget()],
       ),
-      body: const IDCardPage(),
-      bottomNavigationBar: const GeolocatorWidget(),
+      body: IDCardPage(
+        position: position,
+      ),
     );
   }
 }

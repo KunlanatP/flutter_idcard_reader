@@ -102,6 +102,7 @@ class ThaiIDType {
   static String get expireDate => 'expireDate';
   static String get gender => 'gender';
   static String get photo => 'photo';
+  static String get mobile => 'mobile';
 }
 
 class ThaiIDCard {
@@ -118,6 +119,8 @@ class ThaiIDCard {
   String? expireDate;
   int? gender;
   List<int> photo;
+  String? mobile;
+
   ThaiIDCard({
     this.cid,
     this.titleTH,
@@ -132,6 +135,7 @@ class ThaiIDCard {
     this.expireDate,
     this.gender,
     this.photo = const [],
+    this.mobile,
   });
 
   Map<String, dynamic> toMap() {
@@ -149,6 +153,7 @@ class ThaiIDCard {
       'expireDate': expireDate,
       'gender': gender,
       'photo': photo,
+      'mobile': mobile,
     };
   }
 
@@ -218,6 +223,61 @@ class ThaiIDCard {
 
   @override
   String toString() {
-    return 'ThaiIDCard(cid: $cid, titleTH: $titleTH, firstnameTH: $firstnameTH, lastnameTH: $lastnameTH, titleEN: $titleEN, firstnameEN: $firstnameEN, lastnameEN: $lastnameEN, address: $address, birthdate: $birthdate, issueDate: $issueDate, expireDate: $expireDate, gender: $gender, photo: $photo)';
+    return 'ThaiIDCard(cid: $cid, titleTH: $titleTH, firstnameTH: $firstnameTH, lastnameTH: $lastnameTH, titleEN: $titleEN, firstnameEN: $firstnameEN, lastnameEN: $lastnameEN, address: $address, birthdate: $birthdate, issueDate: $issueDate, expireDate: $expireDate, gender: $gender, photo: $photo, mobile: $mobile)';
+  }
+
+  ThaiIDCard copyWith({
+    String? cid,
+    String? titleTH,
+    String? firstnameTH,
+    String? lastnameTH,
+    String? titleEN,
+    String? firstnameEN,
+    String? lastnameEN,
+    String? address,
+    String? birthdate,
+    String? issueDate,
+    String? expireDate,
+    int? gender,
+    List<int>? photo,
+    String? mobile,
+  }) {
+    return ThaiIDCard(
+      cid: cid ?? this.cid,
+      titleTH: titleTH ?? this.titleTH,
+      firstnameTH: firstnameTH ?? this.firstnameTH,
+      lastnameTH: lastnameTH ?? this.lastnameTH,
+      titleEN: titleEN ?? this.titleEN,
+      firstnameEN: firstnameEN ?? this.firstnameEN,
+      lastnameEN: lastnameEN ?? this.lastnameEN,
+      address: address ?? this.address,
+      birthdate: birthdate ?? this.birthdate,
+      issueDate: issueDate ?? this.issueDate,
+      expireDate: expireDate ?? this.expireDate,
+      gender: gender ?? this.gender,
+      photo: photo ?? this.photo,
+      mobile: mobile ?? this.mobile,
+    );
+  }
+
+  ThaiIDCard toResponse({
+    ThaiIDCard? idCard,
+    String? mobilePhone,
+  }) {
+    return ThaiIDCard(
+      cid: idCard?.cid,
+      titleTH: idCard?.titleTH,
+      firstnameTH: idCard?.firstnameTH,
+      lastnameTH: idCard?.lastnameTH,
+      titleEN: idCard?.titleEN,
+      firstnameEN: idCard?.firstnameEN,
+      lastnameEN: idCard?.lastnameEN,
+      address: idCard?.address,
+      birthdate: idCard?.birthdate,
+      issueDate: idCard?.issueDate,
+      expireDate: idCard?.expireDate,
+      gender: idCard?.gender,
+      mobile: mobilePhone,
+    );
   }
 }

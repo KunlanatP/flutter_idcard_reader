@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_idcard_reader/constants/language.dart';
+import 'package:flutter_idcard_reader/pages/read_card.dart';
 import 'package:flutter_idcard_reader/widgets/btn_language.dart';
 import 'package:flutter_idcard_reader/widgets/custom_button.dart';
 import 'package:flutter_idcard_reader/widgets/geolocator_widget.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  Position? _position;
 
   @override
   Widget build(BuildContext context) {
@@ -47,23 +56,28 @@ class HomePage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                MapsWidget(
+                  positionCallback: (position) {
+                    setState(() => _position = position);
+                  },
+                ),
+                const SizedBox(height: 15),
                 CustomButtonWidget(
                   label: translation(context).btn_read,
                   labelStyle:
                       theme.textTheme.subtitle1!.copyWith(color: Colors.white),
                   color: theme.primaryColor,
-                  onPressed: () => Navigator.pushNamed(context, "/read-card"),
-                ),
-                const SizedBox(height: 15),
-                CustomButtonWidget(
-                  label: translation(context).btn_setting,
-                  onPressed: () => Navigator.pushNamed(context, "/settings"),
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ReadCardPage(position: _position),
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
         ),
-        bottomNavigationBar: const GeolocatorWidget(),
       ),
     );
   }

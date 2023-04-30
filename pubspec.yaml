@@ -34,6 +34,8 @@ dependencies:
   drop_shadow: ^0.0.2+1
   image_picker: ^0.8.6
   carousel_slider: ^4.2.0
+  google_maps_flutter: ^2.2.5
+  flutter_riverpod: ^2.3.6
 
 dev_dependencies:
   flutter_test:

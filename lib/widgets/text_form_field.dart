@@ -102,7 +102,7 @@ class _FormTextInputState extends State<FormTextInput> {
               child: Text(
                 widget.suffixLabel!,
                 textAlign: TextAlign.right,
-                style: theme.textTheme.button?.merge(
+                style: theme.textTheme.labelLarge?.merge(
                   const TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 11,
