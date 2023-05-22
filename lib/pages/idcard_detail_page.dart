@@ -11,14 +11,13 @@ import 'package:flutter_idcard_reader/utils/format_date.dart';
 import 'package:flutter_idcard_reader/utils/gender_convert.dart';
 import 'package:flutter_idcard_reader/widgets/btn_language.dart';
 import 'package:flutter_idcard_reader/widgets/custom_on_click.dart';
-import 'package:flutter_idcard_reader/widgets/text_form_field.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:thai_idcard_reader_flutter/thai_idcard_reader_flutter.dart';
 
-import '../futures/geocoding_feature.dart';
+import '../validate/phone_formatter.dart';
 
 class IDCardDetailPage extends StatefulWidget {
   final ThaiIDCard? thaiIDCard;
@@ -110,7 +109,8 @@ class _IDCardDetailPageState extends State<IDCardDetailPage> {
                     alignment: AlignmentDirectional.center,
                     children: [
                       DropShadow(
-                        child: widget.thaiIDCard?.photo == null
+                        child: widget.thaiIDCard?.photo == null ||
+                                widget.thaiIDCard!.photo.isEmpty
                             ? Image.asset('assets/images/default.png', scale: 3)
                             : Image.memory(
                                 Uint8List.fromList(widget.thaiIDCard!.photo),
@@ -130,7 +130,8 @@ class _IDCardDetailPageState extends State<IDCardDetailPage> {
                             ),
                             child: IconButton(
                               onPressed: () => showAlertDialog(
-                                content: widget.thaiIDCard?.photo == null
+                                content: widget.thaiIDCard?.photo == null ||
+                                        widget.thaiIDCard!.photo.isEmpty
                                     ? Image.asset(
                                         'assets/images/default.png',
                                         fit: BoxFit.cover,
@@ -201,7 +202,7 @@ class _IDCardDetailPageState extends State<IDCardDetailPage> {
                     children: [
                       Text(
                         'เบอร์โทรศัพท์ :',
-                        style: theme.textTheme.subtitle1!.merge(
+                        style: theme.textTheme.titleMedium!.merge(
                           const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
@@ -210,11 +211,19 @@ class _IDCardDetailPageState extends State<IDCardDetailPage> {
                         ),
                       ),
                       const SizedBox(height: 5),
-                      TextField(
+                      TextFormField(
                         controller: _mobileTxt,
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
                         ),
+                        maxLength: 12,
+                        keyboardType: TextInputType.phone,
+                        inputFormatters: [
+                          PhoneNumberTextInputFormatter(
+                            mask: '###-###-####',
+                            separator: '-',
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -297,7 +306,7 @@ class _IDCardDetailPageState extends State<IDCardDetailPage> {
                       onPressed: () {
                         var personData = ThaiIDCard().toResponse(
                           idCard: widget.thaiIDCard,
-                          mobilePhone: _mobileTxt.text,
+                          mobilePhone: _mobileTxt.text.replaceAll('-', ''),
                         );
                         final newData = IDCardDetailModel(
                           userId: 'userId',
@@ -307,7 +316,7 @@ class _IDCardDetailPageState extends State<IDCardDetailPage> {
                             longitude: widget.position!.longitude,
                           ),
                         );
-                        print(jsonEncode(newData));
+                        debugPrint(jsonEncode(newData));
                       },
                       icon: const FaIcon(FontAwesomeIcons.floppyDisk),
                       label: const Text('บันทึก'),
@@ -348,7 +357,7 @@ class _IDCardDetailPageState extends State<IDCardDetailPage> {
           flex: subTitleFlex,
           child: Text(
             '$subTitle',
-            style: theme.textTheme.subtitle1!.merge(
+            style: theme.textTheme.titleMedium!.merge(
               const TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 14,
@@ -363,7 +372,7 @@ class _IDCardDetailPageState extends State<IDCardDetailPage> {
           child: Text(
             '$value',
             textAlign: TextAlign.end,
-            style: theme.textTheme.subtitle1!.merge(
+            style: theme.textTheme.titleMedium!.merge(
               const TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 14,

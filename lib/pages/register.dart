@@ -4,10 +4,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_idcard_reader/constants/language.dart';
 import 'package:flutter_idcard_reader/themes/colors.dart';
-import 'package:flutter_idcard_reader/validate/email.dart';
 import 'package:flutter_idcard_reader/widgets/btn_language.dart';
 import 'package:flutter_idcard_reader/widgets/stepper.dart';
 import 'package:flutter_idcard_reader/widgets/text_form_field.dart';
+
+import '../validate/text_validate.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -30,7 +31,7 @@ class _RegisterPageState extends State<RegisterPage> {
         children: [
           Text(
             translation(context).hi_title,
-            style: theme.textTheme.headline3!.merge(
+            style: theme.textTheme.displaySmall!.merge(
               TextStyle(
                 fontWeight: FontWeight.bold,
                 color: theme.primaryColor,
@@ -39,7 +40,7 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           Text(
             translation(context).create_a_new_account_title,
-            style: theme.textTheme.headline6!.merge(
+            style: theme.textTheme.titleLarge!.merge(
               const TextStyle(
                 fontWeight: FontWeight.w500,
                 color: textColorSubTitle,
@@ -58,7 +59,7 @@ class _RegisterPageState extends State<RegisterPage> {
           RichText(
             text: TextSpan(
               text: '${translation(context).have_an_account_label}  ',
-              style: theme.textTheme.bodyText2!.merge(
+              style: theme.textTheme.bodyMedium!.merge(
                 const TextStyle(color: textColor),
               ),
               children: [
@@ -66,7 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   recognizer: TapGestureRecognizer()
                     ..onTapDown = (details) => Navigator.pop(context),
                   text: translation(context).btn_sign_in,
-                  style: theme.textTheme.button!.merge(
+                  style: theme.textTheme.labelLarge!.merge(
                     TextStyle(
                       fontWeight: FontWeight.w500,
                       color: theme.primaryColor,
@@ -81,7 +82,7 @@ class _RegisterPageState extends State<RegisterPage> {
           Center(
             child: Text(
               "2022 \u00a9 Kunlanat Pakine",
-              style: theme.textTheme.bodyText2!.merge(
+              style: theme.textTheme.bodyMedium!.merge(
                 const TextStyle(color: textColor),
               ),
             ),
@@ -262,7 +263,7 @@ class _RegisterFormState extends State<RegisterForm> {
           children: [
             Text(
               '${translation(context).password_title} :',
-              style: theme.textTheme.subtitle1!.merge(
+              style: theme.textTheme.titleMedium!.merge(
                 const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 14,
@@ -279,7 +280,7 @@ class _RegisterFormState extends State<RegisterForm> {
             const SizedBox(height: 15),
             Text(
               '${translation(context).confirm_password_title} :',
-              style: theme.textTheme.subtitle1!.merge(
+              style: theme.textTheme.titleMedium!.merge(
                 const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 14,
@@ -311,7 +312,7 @@ class _RegisterFormState extends State<RegisterForm> {
           children: [
             Text(
               '${translation(context).firstname_title} :',
-              style: theme.textTheme.subtitle1!.merge(
+              style: theme.textTheme.titleMedium!.merge(
                 const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 14,
@@ -328,7 +329,7 @@ class _RegisterFormState extends State<RegisterForm> {
             const SizedBox(height: 15),
             Text(
               '${translation(context).lastname_title} :',
-              style: theme.textTheme.subtitle1!.merge(
+              style: theme.textTheme.titleMedium!.merge(
                 const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 14,
@@ -345,7 +346,7 @@ class _RegisterFormState extends State<RegisterForm> {
             const SizedBox(height: 15),
             Text(
               '${translation(context).phone_number_title} :',
-              style: theme.textTheme.subtitle1!.merge(
+              style: theme.textTheme.titleMedium!.merge(
                 const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 14,
@@ -375,7 +376,7 @@ class _RegisterFormState extends State<RegisterForm> {
         children: [
           Text(
             '${translation(context).username_title} :',
-            style: theme.textTheme.subtitle1!.merge(
+            style: theme.textTheme.titleMedium!.merge(
               const TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 14,

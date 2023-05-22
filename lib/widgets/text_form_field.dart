@@ -79,7 +79,7 @@ class _FormTextInputState extends State<FormTextInput> {
     final inputDecoration = InputDecoration(
       hintText: widget.hintText,
       helperText: widget.helperText,
-      hintStyle: theme.textTheme.bodyText2!
+      hintStyle: theme.textTheme.bodyMedium!
           .merge(const TextStyle(color: Color(0xFF7E7E7E))),
       errorText: widget.errorText,
       border: const OutlineInputBorder(),
@@ -143,7 +143,7 @@ class _FormTextInputState extends State<FormTextInput> {
         maxLines: widget.maxLines,
         minLines: widget.minLines,
         controller: _textController,
-        style: theme.textTheme.bodyText2,
+        style: theme.textTheme.bodyMedium,
         keyboardType: widget.type == InputTypes.number
             ? const TextInputType.numberWithOptions(decimal: true)
             : null,

@@ -182,7 +182,7 @@ class ThaiIDCardDetailWidget extends StatelessWidget {
                       RichText(
                         text: TextSpan(
                           text: 'บัตรประจำตัวประชาชน ',
-                          style: theme.textTheme.subtitle2!.merge(
+                          style: theme.textTheme.titleSmall!.merge(
                             GoogleFonts.inter(
                               fontSize: 15,
                               color: const Color(0xFF333335),
@@ -192,7 +192,7 @@ class ThaiIDCardDetailWidget extends StatelessWidget {
                           children: <TextSpan>[
                             TextSpan(
                               text: 'Thai National ID Card',
-                              style: theme.textTheme.subtitle2!.merge(
+                              style: theme.textTheme.titleSmall!.merge(
                                 GoogleFonts.inter(
                                   fontSize: 15,
                                   letterSpacing: -1.0,
@@ -212,7 +212,7 @@ class ThaiIDCardDetailWidget extends StatelessWidget {
                               children: [
                                 Text(
                                   'เลขบัตรประจำตัวประชาชน',
-                                  style: theme.textTheme.caption!.merge(
+                                  style: theme.textTheme.bodySmall!.merge(
                                     GoogleFonts.inter(
                                       fontSize: 10,
                                       color: const Color(0xFF333335),
@@ -221,7 +221,7 @@ class ThaiIDCardDetailWidget extends StatelessWidget {
                                 ),
                                 Text(
                                   'Identityfication Number',
-                                  style: theme.textTheme.caption!.merge(
+                                  style: theme.textTheme.bodySmall!.merge(
                                     GoogleFonts.inter(
                                       fontSize: 9,
                                       color: const Color(0xFF000D55),
@@ -234,7 +234,7 @@ class ThaiIDCardDetailWidget extends StatelessWidget {
                               padding: const EdgeInsets.only(left: 10),
                               child: Text(
                                 formattedIDCard(thaiIDCard?.cid),
-                                style: theme.textTheme.subtitle1!.merge(
+                                style: theme.textTheme.titleMedium!.merge(
                                   GoogleFonts.inter(
                                     fontSize: 12,
                                     letterSpacing: 0.5,
@@ -287,7 +287,7 @@ class TableWidget extends StatelessWidget {
               children: [
                 Text(
                   'ชื่อและนามสกุล',
-                  style: theme.textTheme.caption!.merge(
+                  style: theme.textTheme.bodySmall!.merge(
                     GoogleFonts.inter(
                       fontSize: 8,
                       color: const Color(0xFF333335),
@@ -310,7 +310,7 @@ class TableWidget extends StatelessWidget {
             children: [
               Text(
                 '${thaiIDCard?.titleTH} ${thaiIDCard?.firstnameTH} ${thaiIDCard?.lastnameTH}',
-                style: theme.textTheme.subtitle1!.merge(
+                style: theme.textTheme.titleMedium!.merge(
                   GoogleFonts.inter(
                     fontSize: 14,
                     color: const Color(0xFF333335),
@@ -322,7 +322,7 @@ class TableWidget extends StatelessWidget {
                 children: [
                   Text(
                     'Name',
-                    style: theme.textTheme.caption!.merge(
+                    style: theme.textTheme.bodySmall!.merge(
                       GoogleFonts.inter(
                         fontSize: 8,
                         color: const Color(0xFF000D55),
@@ -332,7 +332,7 @@ class TableWidget extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     '${thaiIDCard?.titleEN} ${thaiIDCard?.firstnameEN}',
-                    style: theme.textTheme.caption!.merge(
+                    style: theme.textTheme.bodySmall!.merge(
                       GoogleFonts.inter(
                         fontSize: 8,
                         color: const Color(0xFF000D55),
@@ -346,7 +346,7 @@ class TableWidget extends StatelessWidget {
                 children: [
                   Text(
                     'Last name',
-                    style: theme.textTheme.caption!.merge(
+                    style: theme.textTheme.bodySmall!.merge(
                       GoogleFonts.inter(
                         fontSize: 8,
                         color: const Color(0xFF000D55),
@@ -356,7 +356,7 @@ class TableWidget extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     '${thaiIDCard?.lastnameEN}',
-                    style: theme.textTheme.caption!.merge(
+                    style: theme.textTheme.bodySmall!.merge(
                       GoogleFonts.inter(
                         fontSize: 8,
                         color: const Color(0xFF000D55),
@@ -372,7 +372,7 @@ class TableWidget extends StatelessWidget {
                   children: [
                     Text(
                       'เกิดวันที่',
-                      style: theme.textTheme.caption!.merge(
+                      style: theme.textTheme.bodySmall!.merge(
                         GoogleFonts.inter(
                           fontSize: 8,
                           color: const Color(0xFF333335),
@@ -382,7 +382,7 @@ class TableWidget extends StatelessWidget {
                     const SizedBox(width: 8),
                     Text(
                       formattedDateTH('${thaiIDCard?.birthdate}'),
-                      style: theme.textTheme.caption!.merge(
+                      style: theme.textTheme.bodySmall!.merge(
                         GoogleFonts.inter(
                           fontSize: 8,
                           color: const Color(0xFF333335),
@@ -399,7 +399,7 @@ class TableWidget extends StatelessWidget {
                   children: [
                     Text(
                       'Date of Birth',
-                      style: theme.textTheme.caption!.merge(
+                      style: theme.textTheme.bodySmall!.merge(
                         GoogleFonts.inter(
                           fontSize: 8,
                           color: const Color(0xFF000D55),
@@ -409,7 +409,7 @@ class TableWidget extends StatelessWidget {
                     const SizedBox(width: 8),
                     Text(
                       formattedDateEN('${thaiIDCard?.birthdate}'),
-                      style: theme.textTheme.caption!.merge(
+                      style: theme.textTheme.bodySmall!.merge(
                         GoogleFonts.inter(
                           fontSize: 8,
                           color: const Color(0xFF000D55),
@@ -424,7 +424,7 @@ class TableWidget extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 10),
                 child: Text(
                   'ศาสนา   -',
-                  style: theme.textTheme.caption!.merge(
+                  style: theme.textTheme.bodySmall!.merge(
                     GoogleFonts.inter(
                       fontSize: 8,
                       color: const Color(0xFF333335),
@@ -465,7 +465,7 @@ class TableCardDateWidget extends StatelessWidget {
                 children: [
                   Text(
                     formattedDateTH('${thaiIDCard?.issueDate}'),
-                    style: theme.textTheme.caption!.merge(
+                    style: theme.textTheme.bodySmall!.merge(
                       GoogleFonts.inter(
                         fontSize: 8,
                         color: const Color(0xFF333335),
@@ -474,7 +474,7 @@ class TableCardDateWidget extends StatelessWidget {
                   ),
                   Text(
                     'วันออกบัตร',
-                    style: theme.textTheme.caption!.merge(
+                    style: theme.textTheme.bodySmall!.merge(
                       GoogleFonts.inter(
                         fontSize: 8,
                         color: const Color(0xFF333335),
@@ -491,7 +491,7 @@ class TableCardDateWidget extends StatelessWidget {
                   children: [
                     Text(
                       formattedDateTH('${thaiIDCard?.expireDate}'),
-                      style: theme.textTheme.caption!.merge(
+                      style: theme.textTheme.bodySmall!.merge(
                         GoogleFonts.inter(
                           fontSize: 8,
                           color: const Color(0xFF333335),
@@ -500,7 +500,7 @@ class TableCardDateWidget extends StatelessWidget {
                     ),
                     Text(
                       'วันบัตรหมดอายุ',
-                      style: theme.textTheme.caption!.merge(
+                      style: theme.textTheme.bodySmall!.merge(
                         GoogleFonts.inter(
                           fontSize: 8,
                           color: const Color(0xFF333335),
@@ -519,7 +519,7 @@ class TableCardDateWidget extends StatelessWidget {
                 children: [
                   Text(
                     formattedDateEN('${thaiIDCard?.issueDate}'),
-                    style: theme.textTheme.caption!.merge(
+                    style: theme.textTheme.bodySmall!.merge(
                       GoogleFonts.inter(
                         fontSize: 8,
                         color: const Color(0xFF000D55),
@@ -528,7 +528,7 @@ class TableCardDateWidget extends StatelessWidget {
                   ),
                   Text(
                     'Date of Issue',
-                    style: theme.textTheme.caption!.merge(
+                    style: theme.textTheme.bodySmall!.merge(
                       GoogleFonts.inter(
                         fontSize: 8,
                         color: const Color(0xFF000D55),
@@ -541,7 +541,7 @@ class TableCardDateWidget extends StatelessWidget {
                 children: [
                   Text(
                     'xxxxxx xxxxxx',
-                    style: theme.textTheme.caption!.merge(
+                    style: theme.textTheme.bodySmall!.merge(
                       GoogleFonts.inter(
                         fontSize: 8,
                         color: const Color(0xFF000D55),
@@ -550,7 +550,7 @@ class TableCardDateWidget extends StatelessWidget {
                   ),
                   Text(
                     '(เจ้าหน้าที่ออกบัตร)',
-                    style: theme.textTheme.caption!.merge(
+                    style: theme.textTheme.bodySmall!.merge(
                       GoogleFonts.inter(
                         fontSize: 7,
                         color: const Color(0xFF000D55),
@@ -566,7 +566,7 @@ class TableCardDateWidget extends StatelessWidget {
                   children: [
                     Text(
                       formattedDateEN('${thaiIDCard?.expireDate}'),
-                      style: theme.textTheme.caption!.merge(
+                      style: theme.textTheme.bodySmall!.merge(
                         GoogleFonts.inter(
                           fontSize: 8,
                           color: const Color(0xFF000D55),
@@ -575,7 +575,7 @@ class TableCardDateWidget extends StatelessWidget {
                     ),
                     Text(
                       'Date of Expiry',
-                      style: theme.textTheme.caption!.merge(
+                      style: theme.textTheme.bodySmall!.merge(
                         GoogleFonts.inter(
                           fontSize: 8,
                           color: const Color(0xFF000D55),

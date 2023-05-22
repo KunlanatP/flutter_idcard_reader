@@ -3,7 +3,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_idcard_reader/constants/language.dart';
 import 'package:flutter_idcard_reader/futures/show_exit_popup.dart';
-import 'package:flutter_idcard_reader/models/pageable_with_search.dart';
 import 'package:flutter_idcard_reader/state/user_state.dart';
 import 'package:flutter_idcard_reader/themes/colors.dart';
 import 'package:flutter_idcard_reader/widgets/btn_language.dart';
@@ -26,7 +25,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   String? _username = '1234567890123';
   String? _password = '0123456789';
   bool _isObscureText = true;
-  bool _isApiCallProces = false;
 
   @override
   void didChangeDependencies() {

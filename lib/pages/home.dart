@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_idcard_reader/constants/language.dart';
-import 'package:flutter_idcard_reader/pages/read_card.dart';
+import 'package:flutter_idcard_reader/constants/mock_data.dart';
+import 'package:flutter_idcard_reader/pages/idcard_detail_page.dart';
 import 'package:flutter_idcard_reader/widgets/btn_language.dart';
 import 'package:flutter_idcard_reader/widgets/custom_button.dart';
 import 'package:flutter_idcard_reader/widgets/geolocator_widget.dart';
@@ -64,13 +65,18 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 15),
                 CustomButtonWidget(
                   label: translation(context).btn_read,
-                  labelStyle:
-                      theme.textTheme.titleMedium!.copyWith(color: Colors.white),
+                  labelStyle: theme.textTheme.titleMedium!
+                      .copyWith(color: Colors.white),
                   color: theme.primaryColor,
                   onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ReadCardPage(position: _position),
+                      // builder: (context) => ReadCardPage(position: _position),
+                      builder: (context) => IDCardDetailPage(
+                        thaiIDCard: mockData,
+                        position: _position,
+                      ),
+                      // builder: (context) => const PhoneFormatPage(),
                     ),
                   ),
                 ),

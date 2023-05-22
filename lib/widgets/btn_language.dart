@@ -32,10 +32,10 @@ class _LanguageButtonWidgetState extends State<LanguageButtonWidget> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).textTheme;
-    TextStyle? style = theme.button?.copyWith(
+    TextStyle? style = theme.labelLarge?.copyWith(
       color: Colors.grey,
     );
-    TextStyle? styleFocus = theme.button?.copyWith(
+    TextStyle? styleFocus = theme.labelLarge?.copyWith(
       color: const Color(0xFF333335),
       fontWeight: FontWeight.bold,
     );
@@ -49,7 +49,7 @@ class _LanguageButtonWidgetState extends State<LanguageButtonWidget> {
           ),
         ),
         const SizedBox(width: 10),
-        Center(child: Text('|', style: theme.button)),
+        Center(child: Text('|', style: theme.labelLarge)),
         const SizedBox(width: 10),
         Center(
           child: CustomTextButtonWidget(

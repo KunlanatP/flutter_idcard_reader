@@ -31,9 +31,7 @@ class ReadCardPage extends StatelessWidget {
         ),
         actions: const [LanguageButtonWidget()],
       ),
-      body: IDCardPage(
-        position: position,
-      ),
+      body: IDCardPage(position: position),
     );
   }
 }

@@ -31,7 +31,7 @@ class _CustomTextButtonWidgetState extends State<CustomTextButtonWidget> {
       onShowHoverHighlight: (value) => setState(() => isHovered = value),
       child: Text(
         widget.text,
-        style: (widget.textStyle ?? theme.textTheme.subtitle1)!.copyWith(
+        style: (widget.textStyle ?? theme.textTheme.titleMedium)!.copyWith(
           color: isHovered ? Colors.blue : widget.textColor,
         ),
       ),
@@ -103,7 +103,7 @@ class CustomButtonWidget extends StatelessWidget {
         label: Text(
           label,
           style: labelStyle ??
-              theme.textTheme.subtitle1!.copyWith(color: _textColor),
+              theme.textTheme.titleMedium!.copyWith(color: _textColor),
         ),
       );
     }
@@ -119,7 +119,7 @@ class CustomButtonWidget extends StatelessWidget {
       child: Text(
         label,
         style: labelStyle ??
-            theme.textTheme.subtitle1!.copyWith(color: _textColor),
+            theme.textTheme.titleMedium!.copyWith(color: _textColor),
       ),
     );
   }
