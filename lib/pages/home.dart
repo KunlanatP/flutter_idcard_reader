@@ -1,12 +1,18 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_idcard_reader/constants/language.dart';
 import 'package:flutter_idcard_reader/constants/mock_data.dart';
 import 'package:flutter_idcard_reader/pages/idcard_detail_page.dart';
+import 'package:flutter_idcard_reader/pages/read_card.dart';
 import 'package:flutter_idcard_reader/widgets/btn_language.dart';
 import 'package:flutter_idcard_reader/widgets/custom_button.dart';
 import 'package:flutter_idcard_reader/widgets/geolocator_widget.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -64,22 +70,26 @@ class _HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(height: 15),
                 CustomButtonWidget(
-                  label: translation(context).btn_read,
-                  labelStyle: theme.textTheme.titleMedium!
-                      .copyWith(color: Colors.white),
-                  color: theme.primaryColor,
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      // builder: (context) => ReadCardPage(position: _position),
-                      builder: (context) => IDCardDetailPage(
-                        thaiIDCard: mockData,
-                        position: _position,
-                      ),
-                      // builder: (context) => const PhoneFormatPage(),
-                    ),
-                  ),
-                ),
+                    label: translation(context).btn_read,
+                    labelStyle: theme.textTheme.titleMedium!
+                        .copyWith(color: Colors.white),
+                    color: theme.primaryColor,
+                    onPressed: () async {
+                      // final ByteData bytes =
+                      //     await rootBundle.load('assets/images/default.png');
+                      // final Uint8List list = bytes.buffer.asUint8List();
+
+                      // debugPrint(list.toString());
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ReadCardPage(position: _position),
+                          // builder: (context) => IDCardDetailPage(thaiIDCard: mockData, position: _position),
+                          // builder: (context) => const PhoneFormatPage(),
+                        ),
+                      );
+                    }),
               ],
             ),
           ),

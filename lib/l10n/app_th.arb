@@ -46,5 +46,8 @@
     "insert_idcard": "กรุณาเสียบบัตรประชาชน",
     "location_text": "ตำแหน่งที่ตั้ง",
     "card_reader_text": "อ่านบัตรประชาชน",
-    "text_view_more": "ดูเพิ่มเติม ..."
+    "text_view_more": "ดูเพิ่มเติม ...",
+    "txt_delete": "ลบ",
+    "txt_save": "บันทึก",
+    "txt_do_you_want_to_save_it": "คุณต้องการบันทึกหรือไม่?"
 }

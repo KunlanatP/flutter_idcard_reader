@@ -9,6 +9,7 @@ import 'package:flutter_idcard_reader/models/model.dart';
 import 'package:flutter_idcard_reader/themes/colors.dart';
 import 'package:flutter_idcard_reader/utils/format_date.dart';
 import 'package:flutter_idcard_reader/utils/gender_convert.dart';
+import 'package:flutter_idcard_reader/widgets/alert_dialog.dart';
 import 'package:flutter_idcard_reader/widgets/btn_language.dart';
 import 'package:flutter_idcard_reader/widgets/custom_on_click.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,6 +17,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:thai_idcard_reader_flutter/thai_idcard_reader_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../validate/phone_formatter.dart';
 
@@ -59,6 +61,7 @@ class _IDCardDetailPageState extends State<IDCardDetailPage> {
     final theme = Theme.of(context);
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    final language = AppLocalizations.of(context)!;
 
     final appBar = AppBar(
       title: Text(
@@ -304,19 +307,26 @@ class _IDCardDetailPageState extends State<IDCardDetailPage> {
                     width: constraints.maxWidth < 390 ? width : 390,
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        var personData = ThaiIDCard().toResponse(
-                          idCard: widget.thaiIDCard,
-                          mobilePhone: _mobileTxt.text.replaceAll('-', ''),
+                        showDialogConfirm(
+                          language.txt_do_you_want_to_save_it,
+                          context,
+                          () {
+                            var personData = ThaiIDCard().toResponse(
+                              idCard: widget.thaiIDCard,
+                              mobilePhone: _mobileTxt.text.replaceAll('-', ''),
+                            );
+                            final newData = IDCardDetailModel(
+                              userId: 'userId',
+                              personData: personData,
+                              location: LocationModel(
+                                latitude: widget.position!.latitude,
+                                longitude: widget.position!.longitude,
+                              ),
+                            );
+                            debugPrint(jsonEncode(newData));
+                            Navigator.of(context).pop();
+                          },
                         );
-                        final newData = IDCardDetailModel(
-                          userId: 'userId',
-                          personData: personData,
-                          location: LocationModel(
-                            latitude: widget.position!.latitude,
-                            longitude: widget.position!.longitude,
-                          ),
-                        );
-                        debugPrint(jsonEncode(newData));
                       },
                       icon: const FaIcon(FontAwesomeIcons.floppyDisk),
                       label: const Text('บันทึก'),

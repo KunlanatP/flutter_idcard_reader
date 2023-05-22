@@ -42,5 +42,8 @@
     "insert_idcard": "Please insert ID Card.",
     "location_text": "Location",
     "card_reader_text": "IDCard Reader",
-    "text_view_more": "View More ..."
+    "text_view_more": "View More ...",
+    "txt_delete": "Delete",
+    "txt_save": "Save",
+    "txt_do_you_want_to_save_it": "Do you want to save it?"
 }
