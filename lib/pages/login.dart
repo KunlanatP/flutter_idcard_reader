@@ -1,25 +1,38 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_idcard_reader/constants/language.dart';
 import 'package:flutter_idcard_reader/futures/show_exit_popup.dart';
+import 'package:flutter_idcard_reader/models/pageable_with_search.dart';
+import 'package:flutter_idcard_reader/state/user_state.dart';
 import 'package:flutter_idcard_reader/themes/colors.dart';
-import 'package:flutter_idcard_reader/validate/email.dart';
 import 'package:flutter_idcard_reader/widgets/btn_language.dart';
 import 'package:flutter_idcard_reader/widgets/custom_button.dart';
 import 'package:flutter_idcard_reader/widgets/text_form_field.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LoginPage extends StatefulWidget {
+import '../models/login_model.dart';
+
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
-  String? username;
-  String? password;
+  String? _username = '1234567890123';
+  String? _password = '0123456789';
+  bool _isObscureText = true;
+  bool _isApiCallProces = false;
+
+  @override
+  void didChangeDependencies() {
+    ref.read(userController).init();
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
       children: [
         Text(
           translation(context).welcome_title,
-          style: theme.textTheme.headline3!.merge(
+          style: theme.textTheme.displaySmall!.merge(
             TextStyle(
               fontWeight: FontWeight.bold,
               color: theme.primaryColor,
@@ -49,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         Text(
           translation(context).sign_in_to_continue_title,
-          style: theme.textTheme.headline6!.merge(
+          style: theme.textTheme.titleLarge!.merge(
             const TextStyle(
               fontWeight: FontWeight.w500,
               color: textColorSubTitle,
@@ -65,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
         RichText(
           text: TextSpan(
             text: '${translation(context).no_account_label}  ',
-            style: theme.textTheme.bodyText2!.merge(
+            style: theme.textTheme.bodyMedium!.merge(
               const TextStyle(color: textColor),
             ),
             children: [
@@ -74,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                   ..onTapDown =
                       (details) => Navigator.pushNamed(context, "/register"),
                 text: translation(context).btn_sign_up,
-                style: theme.textTheme.button!.merge(
+                style: theme.textTheme.labelLarge!.merge(
                   TextStyle(
                     fontWeight: FontWeight.w500,
                     color: theme.primaryColor,
@@ -89,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
         Center(
           child: Text(
             "2022 \u00a9 Kunlanat Pakine",
-            style: theme.textTheme.bodyText2!.merge(
+            style: theme.textTheme.bodyMedium!.merge(
               const TextStyle(color: textColor),
             ),
           ),
@@ -122,8 +135,8 @@ class _LoginPageState extends State<LoginPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${translation(context).username_or_email_title} :',
-                          style: theme.textTheme.subtitle1!.merge(
+                          '${translation(context).username_title} :',
+                          style: theme.textTheme.titleMedium!.merge(
                             const TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 14,
@@ -133,17 +146,16 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         const SizedBox(height: 5),
                         FormTextInput(
-                          defaultValue: username,
-                          errorText: errorTextEmailAddress(username),
-                          hintText: translation(context).username_or_email_hint,
-                          onSubmitted: (value) {
-                            setState(() => username = value);
+                          defaultValue: _username,
+                          hintText: translation(context).username_hint,
+                          onChanged: (value) {
+                            setState(() => _username = value);
                           },
                         ),
                         const SizedBox(height: 15),
                         Text(
                           '${translation(context).password_title} :',
-                          style: theme.textTheme.subtitle1!.merge(
+                          style: theme.textTheme.titleMedium!.merge(
                             const TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 14,
@@ -153,10 +165,17 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         const SizedBox(height: 5),
                         FormTextInput(
-                          defaultValue: username,
+                          defaultValue: _password,
+                          obscureText: _isObscureText,
+                          suffixContent: InkWell(
+                            onTap: () {
+                              setState(() => _isObscureText = !_isObscureText);
+                            },
+                            child: const Icon(FluentIcons.eye_16_regular),
+                          ),
                           hintText: translation(context).password_hint,
                           onChanged: (value) {
-                            setState(() => password = value);
+                            setState(() => _password = value);
                           },
                         ),
                         const SizedBox(height: 15),
@@ -165,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
                             const Spacer(),
                             CustomTextButtonWidget(
                               text: translation(context).forgot_password,
-                              textStyle: theme.textTheme.button,
+                              textStyle: theme.textTheme.labelLarge,
                             ),
                           ],
                         ),
@@ -173,7 +192,17 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 20),
                     MaterialButton(
-                      onPressed: () => Navigator.pushNamed(context, "/home"),
+                      onPressed: () async {
+                        await ref
+                            .read(userController)
+                            .loginUsers(
+                              LoginModel(
+                                idcard: '$_username',
+                                mobile: '$_password',
+                              ),
+                            )
+                            .then((_) => Navigator.pushNamed(context, "/home"));
+                      },
                       minWidth: double.infinity,
                       height: 42,
                       color: theme.primaryColor,
@@ -182,7 +211,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       child: Text(
                         translation(context).btn_sign_in,
-                        style: theme.textTheme.subtitle1!
+                        style: theme.textTheme.titleMedium!
                             .copyWith(color: Colors.white),
                       ),
                     ),

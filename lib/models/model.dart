@@ -4,14 +4,14 @@ import 'dart:convert';
 import 'package:thai_idcard_reader_flutter/thai_idcard_reader_flutter.dart';
 
 class IDCardDetailModel {
-  final String? userId;
-  final ThaiIDCard? personData;
-  final LocationModel? location;
+  String? userId;
+  ThaiIDCard? personData;
+  LocationModel? location;
   
   IDCardDetailModel({
-    required this.userId,
-    required this.personData,
-    required this.location,
+    this.userId,
+    this.personData,
+    this.location,
   });
 
   IDCardDetailModel copyWith({

@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
                 CustomButtonWidget(
                   label: translation(context).btn_read,
                   labelStyle:
-                      theme.textTheme.subtitle1!.copyWith(color: Colors.white),
+                      theme.textTheme.titleMedium!.copyWith(color: Colors.white),
                   color: theme.primaryColor,
                   onPressed: () => Navigator.push(
                     context,

@@ -8,7 +8,6 @@
     "yes_message": "ใช่",
     "no_message": "ไม่ใช่",
     "or_txt": "หรือ",
-    "location_text": "ตำแหน่งที่ตั้ง",
 
     "welcome_title": "ยินดีต้อนรับ!",
     "sign_in_to_continue_title": "ลงชื่อเข้าใช้เพื่อดำเนินการต่อ",
@@ -16,7 +15,7 @@
     "create_a_new_account_title": "สร้างบัญชีใหม่",
     "no_account_label": "ไม่มีบัญชีผู้ใช้?",
     "have_an_account_label": "มีบัญชีแล้ว?",
-    "username_or_email_title": "ชื่อผู้ใช้ (อีเมล) :",
+    "username_title": "ชื่อผู้ใช้ (เลขประจำตัวประชาชน) :",
     "password_title": "รหัสผ่าน :",
     "confirm_password_title": "ยืนยันรหัสผ่าน :",
     "email_title": "อีเมล :",
@@ -24,7 +23,7 @@
     "lastname_title": "นามสกุล",
     "phone_number_title": "เบอร์โทรศัพท์",
 
-    "username_or_email_hint": "เช่น example@gmail.com",
+    "username_hint": "เลขประจำตัวประชาชน 13 หลัก",
     "password_hint": "ป้อนรหัสผ่าน",
     "firstname_hint": "เช่น แฮร์รี่พอตเตอร์",
     "lastname_hint": "เช่น พอตเตอร์",

@@ -374,7 +374,7 @@ class _RegisterFormState extends State<RegisterForm> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            '${translation(context).username_or_email_title} :',
+            '${translation(context).username_title} :',
             style: theme.textTheme.subtitle1!.merge(
               const TextStyle(
                 fontWeight: FontWeight.w600,
@@ -387,7 +387,7 @@ class _RegisterFormState extends State<RegisterForm> {
           FormTextInput(
             defaultValue: emailAddress,
             errorText: errorTextEmailAddress(emailAddress),
-            hintText: translation(context).username_or_email_hint,
+            hintText: translation(context).username_hint,
             onChanged: (value) {
               setState(() {
                 emailAddress = value;

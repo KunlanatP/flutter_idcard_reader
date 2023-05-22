@@ -3,12 +3,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_idcard_reader/constants/language.dart';
 import 'package:flutter_idcard_reader/pages/home.dart';
 import 'package:flutter_idcard_reader/pages/login.dart';
-import 'package:flutter_idcard_reader/pages/read_card.dart';
 import 'package:flutter_idcard_reader/pages/register.dart';
 import 'package:flutter_idcard_reader/pages/setting.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thai_idcard_reader_flutter/thai_idcard_reader_flutter.dart';
+
+import 'services/shared_service.dart';
 
 final mockData = ThaiIDCard(
   cid: '1419901758925',
@@ -25,7 +26,16 @@ final mockData = ThaiIDCard(
   gender: 2,
 );
 
-void main() {
+Widget _detailHome = const LoginPage();
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  bool result = await SharedService.isLoggedIn();
+  if (result) {
+    _detailHome = const HomePage();
+  }
+
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -65,7 +75,7 @@ class _MyAppState extends State<MyApp> {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: _locale,
-      home: const HomePage(),
+      home: _detailHome,
       // home: IDCardDetailPage(thaiIDCard: mockData),
       onGenerateRoute: (settings) {
         switch (settings.name) {
@@ -93,12 +103,6 @@ class _MyAppState extends State<MyApp> {
               type: PageTransitionType.fade,
               settings: settings,
             );
-          // case '/read-card':
-          //   return PageTransition(
-          //     child: const ReadCardPage(),
-          //     type: PageTransitionType.fade,
-          //     settings: settings,
-          //   );
           default:
             return null;
         }
