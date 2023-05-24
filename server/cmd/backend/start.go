@@ -6,6 +6,8 @@ import (
 	"os"
 	"os/signal"
 
+	"github.com/KunlanatP/idcard-reader-server/internal/api/v1/image"
+	"github.com/KunlanatP/idcard-reader-server/internal/api/v1/people"
 	"github.com/KunlanatP/idcard-reader-server/internal/api/v1/user"
 	"github.com/KunlanatP/idcard-reader-server/internal/core/errs"
 	"github.com/KunlanatP/idcard-reader-server/internal/repository"
@@ -66,13 +68,16 @@ func startCommandLine(cmd *cobra.Command, args []string) {
 	v1Route := fiberApp.Group("/api/v1")
 
 	userRepo := repository.WithGormUserRepository(db)
-	// imageRepo := repository.WithGormImageRepository(db)
+	peopleRepo := repository.WithGormPeopleRepository(db)
+	imageRepo := repository.WithGormImageRepository(db)
 
 	userServ := service.UserServiceImpl(userRepo)
-	// imageServ := service.ImageServiceImpl(imageRepo)
+	peopleServ := service.PeopleServiceImpl(userRepo, peopleRepo)
+	imageServ := service.ImageServiceImpl(imageRepo)
 
 	v1Route.Mount("/", user.UserController(userServ))
-	// v1Route.Mount("/", image.ImageController(imageServ))
+	v1Route.Mount("/", people.PeopleController(peopleServ))
+	v1Route.Mount("/", image.ImageController(imageServ))
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)

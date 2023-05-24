@@ -75,17 +75,14 @@ class _HomePageState extends State<HomePage> {
                         .copyWith(color: Colors.white),
                     color: theme.primaryColor,
                     onPressed: () async {
-                      // final ByteData bytes =
-                      //     await rootBundle.load('assets/images/default.png');
-                      // final Uint8List list = bytes.buffer.asUint8List();
-
-                      // debugPrint(list.toString());
-
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ReadCardPage(position: _position),
-                          // builder: (context) => IDCardDetailPage(thaiIDCard: mockData, position: _position),
+                          // builder: (context) => ReadCardPage(position: _position),
+                          builder: (context) => IDCardDetailPage(
+                            thaiIDCard: mockData,
+                            position: _position,
+                          ),
                           // builder: (context) => const PhoneFormatPage(),
                         ),
                       );

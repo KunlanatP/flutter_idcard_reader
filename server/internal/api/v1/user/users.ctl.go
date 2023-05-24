@@ -17,6 +17,7 @@ func UserController(serv service.UserService) *fiber.App {
 	usersRoute.Get("/users", ctl.GetAllUsers)
 	usersRoute.Post("/users", ctl.CreateUser)
 	usersRoute.Get("/users/login", ctl.UserLogin)
+	usersRoute.Get("/users/:idcard", ctl.GetUserByIdCard)
 
 	return usersRoute
 }
@@ -48,11 +49,20 @@ func (r *userCtl) CreateUser(ctx *fiber.Ctx) (err error) {
 }
 
 func (r *userCtl) UserLogin(ctx *fiber.Ctx) (err error) {
-	query := model.QueryUser{}
+	query := dto.QueryUser{}
 	ctx.QueryParser(&query)
 	data, err := r.svc.UserLogin(ctx.Context(), query)
 	if err != nil {
 		return err
 	}
 	return ctx.Status(fiber.StatusOK).JSON(data)
+}
+
+func (r *userCtl) GetUserByIdCard(ctx *fiber.Ctx) (err error) {
+	idcard := ctx.Params("idcard")
+	data, err := r.svc.GetUserByIdCard(ctx.Context(), idcard)
+	if err != nil {
+		return err
+	}
+	return ctx.Status(http.StatusOK).JSON(data)
 }

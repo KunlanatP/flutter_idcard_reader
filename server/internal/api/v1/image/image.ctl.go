@@ -1,6 +1,7 @@
 package image
 
 import (
+	"github.com/KunlanatP/idcard-reader-server/internal/core/dto"
 	"github.com/KunlanatP/idcard-reader-server/internal/core/errs"
 	"github.com/KunlanatP/idcard-reader-server/internal/service"
 	"github.com/gofiber/fiber/v2"
@@ -25,11 +26,14 @@ type imageCtl struct {
 // }
 
 func (r *imageCtl) CreateImage(ctx *fiber.Ctx) (err error) {
+	query := dto.QueryUserAndPerson{}
+	ctx.QueryParser(&query)
+
 	file, err := ctx.FormFile("image")
 	if err != nil {
 		return err
 	}
-	data, err := r.svc.CreateImage(ctx, file)
+	data, err := r.svc.CreateImage(ctx, query, file)
 	if err != nil {
 		return err
 	}

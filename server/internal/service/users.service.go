@@ -14,7 +14,8 @@ import (
 type UserService interface {
 	Search(ctx context.Context, paging dto.PageableWithSearch) (*dto.Paging[domain.User], error)
 	CreateUser(ctx context.Context, data *model.CreateUserDTO) (*domain.User, error)
-	UserLogin(ctx context.Context, data model.QueryUser) (*domain.User, error)
+	UserLogin(ctx context.Context, data dto.QueryUser) (*domain.User, error)
+	GetUserByIdCard(ctx context.Context, idcard string) (*domain.User, error)
 }
 
 func UserServiceImpl(userRepo repository.UserRepository) UserService {
@@ -56,7 +57,7 @@ func (s *userServiceImpl) CreateUser(ctx context.Context, data *model.CreateUser
 	return s.userRepo.CreateUser(ctx, create)
 }
 
-func (s *userServiceImpl) UserLogin(ctx context.Context, data model.QueryUser) (*domain.User, error) {
+func (s *userServiceImpl) UserLogin(ctx context.Context, data dto.QueryUser) (*domain.User, error) {
 	if err := validate.ValidS(data); err != nil {
 		return nil, err
 	}
@@ -70,4 +71,11 @@ func (s *userServiceImpl) UserLogin(ctx context.Context, data model.QueryUser) (
 	}
 
 	return s.userRepo.FindUserByIdCardAndMobile(ctx, data)
+}
+
+func (s *userServiceImpl) GetUserByIdCard(ctx context.Context, idcard string) (*domain.User, error) {
+	if len(idcard) == 0 {
+		return nil, errs.ErrIDCardIsRequired
+	}
+	return s.userRepo.FindUserByIdCard(ctx, idcard)
 }

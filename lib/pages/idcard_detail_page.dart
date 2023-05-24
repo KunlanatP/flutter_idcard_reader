@@ -6,6 +6,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_idcard_reader/models/model.dart';
+import 'package:flutter_idcard_reader/services/shared_service.dart';
 import 'package:flutter_idcard_reader/themes/colors.dart';
 import 'package:flutter_idcard_reader/utils/format_date.dart';
 import 'package:flutter_idcard_reader/utils/gender_convert.dart';
@@ -19,6 +20,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:thai_idcard_reader_flutter/thai_idcard_reader_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../models/location_model.dart';
+import '../models/people_model.dart';
 import '../validate/phone_formatter.dart';
 
 class IDCardDetailPage extends StatefulWidget {
@@ -310,20 +313,37 @@ class _IDCardDetailPageState extends State<IDCardDetailPage> {
                         showDialogConfirm(
                           language.txt_do_you_want_to_save_it,
                           context,
-                          () {
+                          () async {
+                            final _result = await SharedService.loginDetails();
                             var personData = ThaiIDCard().toResponse(
                               idCard: widget.thaiIDCard,
                               mobilePhone: _mobileTxt.text.replaceAll('-', ''),
                             );
                             final newData = IDCardDetailModel(
-                              userId: 'userId',
-                              personData: personData,
+                              userNationID: _result?.idCard,
+                              personData: PeopleModel(
+                                nationID: personData.cid,
+                                titleTH: personData.titleTH,
+                                firstnameTH: personData.firstnameTH,
+                                lastnameTH: personData.lastnameTH,
+                                titleEN: personData.titleEN,
+                                firstnameEN: personData.firstnameEN,
+                                lastnameEN: personData.lastnameEN,
+                                address: personData.address,
+                                birthdate: personData.birthdate,
+                                issueDate: personData.issueDate,
+                                expireDate: personData.expireDate,
+                                gender: personData.gender,
+                                photo: base64.encode(personData.photo),
+                                mobile: personData.mobile,
+                              ),
                               location: LocationModel(
                                 latitude: widget.position!.latitude,
                                 longitude: widget.position!.longitude,
                               ),
                             );
                             debugPrint(jsonEncode(newData));
+                            // debugPrint('${imageFileList?.length}');
                             Navigator.of(context).pop();
                           },
                         );
@@ -336,7 +356,7 @@ class _IDCardDetailPageState extends State<IDCardDetailPage> {
                   SizedBox(
                     width: constraints.maxWidth < 390 ? width : 390,
                     child: OutlinedButton(
-                      onPressed: () {},
+                      onPressed: () => Navigator.of(context).pop(),
                       child: const Text('ย้อนกลับ'),
                     ),
                   ),

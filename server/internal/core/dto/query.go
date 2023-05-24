@@ -32,3 +32,13 @@ func ReplyPage[T any](data []T, pageable Pageable, total int64) *Paging[T] {
 		Data: data,
 	}
 }
+
+type QueryUser struct {
+	IdCard string `json:"idcard" validate:"required"`
+	Mobile string `json:"mobile" validate:"required,min=10,max=10"`
+}
+
+type QueryUserAndPerson struct {
+	UserID   string `query:"uid" json:"uid" validate:"required"`
+	PersonID string `query:"pid" json:"pid" validate:"required"`
+}

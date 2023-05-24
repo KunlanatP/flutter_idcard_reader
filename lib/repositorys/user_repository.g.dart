@@ -25,7 +25,7 @@ class _UserRepository implements UserRepository {
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(search.toJson());
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>?>(
         _setStreamType<Pagination<List<UserModel>>>(Options(
       method: 'GET',
@@ -59,7 +59,7 @@ class _UserRepository implements UserRepository {
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(login.toJson());
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>?>(_setStreamType<UserModel>(Options(
       method: 'GET',

@@ -191,16 +191,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     const SizedBox(height: 20),
                     MaterialButton(
                       onPressed: () async {
-                        // await ref
-                        //     .read(userController)
-                        //     .loginUsers(
-                        //       LoginModel(
-                        //         idcard: '$_username',
-                        //         mobile: '$_password',
-                        //       ),
-                        //     )
-                        //     .then((_) => Navigator.pushNamed(context, "/home"));
-                        Navigator.pushNamed(context, "/home");
+                        await ref
+                            .read(userController)
+                            .loginUsers(
+                              LoginModel(
+                                idcard: '$_username',
+                                mobile: '$_password',
+                              ),
+                            )
+                            .then((_) => Navigator.pushNamed(context, "/home"));
+                        // Navigator.pushNamed(context, "/home");
                       },
                       minWidth: double.infinity,
                       height: 42,

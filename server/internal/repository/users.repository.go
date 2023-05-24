@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 
-	"github.com/KunlanatP/idcard-reader-server/internal/api/v1/user/model"
 	"github.com/KunlanatP/idcard-reader-server/internal/core/domain"
 	"github.com/KunlanatP/idcard-reader-server/internal/core/dto"
 	"github.com/KunlanatP/idcard-reader-server/internal/core/errs"
@@ -17,7 +16,8 @@ type UserRepository interface {
 	FindUserByName(ctx context.Context, paging dto.Pageable, name string) ([]domain.User, error)
 	CountUserByName(ctx context.Context, name string) (count int64, err error)
 	CreateUser(ctx context.Context, data *domain.User) (*domain.User, error)
-	FindUserByIdCardAndMobile(ctx context.Context, query model.QueryUser) (*domain.User, error)
+	FindUserByIdCardAndMobile(ctx context.Context, query dto.QueryUser) (*domain.User, error)
+	FindUserByIdCard(ctx context.Context, idCard string) (*domain.User, error)
 }
 
 func WithGormUserRepository(db *gorm.DB) UserRepository {
@@ -76,9 +76,19 @@ func (r *userRepository) CreateUser(ctx context.Context, data *domain.User) (*do
 	return creater.ToDomain(), nil
 }
 
-func (r *userRepository) FindUserByIdCardAndMobile(ctx context.Context, query model.QueryUser) (*domain.User, error) {
+func (r *userRepository) FindUserByIdCardAndMobile(ctx context.Context, query dto.QueryUser) (*domain.User, error) {
 	user := &entities.User{}
 	if err := r.db.First(user, "id_card=? AND mobile=?", query.IdCard, query.Mobile).Error; err != nil {
+		if errors.Is(gorm.ErrRecordNotFound, err) {
+			return nil, errs.ErrIDCardIsRequired
+		}
+	}
+	return user.ToDomain(), nil
+}
+
+func (r *userRepository) FindUserByIdCard(ctx context.Context, idCard string) (*domain.User, error) {
+	user := &entities.User{}
+	if err := r.db.First(user, "id_card=?", idCard).Error; err != nil {
 		if errors.Is(gorm.ErrRecordNotFound, err) {
 			return nil, errs.ErrIDCardIsRequired
 		}
