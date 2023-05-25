@@ -14,7 +14,8 @@ import (
 	"github.com/KunlanatP/idcard-reader-server/internal/core/config"
 )
 
-func Base64toPng(data string, appId string) (out *model.ImageDTO) {
+func Base64toPng(data, dirPath, filename string) (out *model.ImageDTO) {
+
 	reader := base64.NewDecoder(base64.StdEncoding, strings.NewReader(data))
 	m, formatString, err := image.Decode(reader)
 	if err != nil {
@@ -23,14 +24,13 @@ func Base64toPng(data string, appId string) (out *model.ImageDTO) {
 	bounds := m.Bounds()
 	fmt.Println(bounds, formatString)
 
-	fullPath := filepath.Join(config.Default.LOCAL_PATH, config.Default.IMAGE_PATH)
-
-	if err := ValidateDirectory(fullPath); err != nil {
+	if err := ValidateDirectory(dirPath); err != nil {
 		log.Fatal(err)
 	}
 
 	//Encode from image format to writer
-	pngFilename := filepath.Join(fullPath, "default.png")
+	originName := fmt.Sprintf("%s.%s", filename, formatString)
+	pngFilename := filepath.Join(dirPath, originName)
 	f, err := os.OpenFile(pngFilename, os.O_WRONLY|os.O_CREATE, 0777)
 	if err != nil {
 		log.Fatal(err)
@@ -44,8 +44,8 @@ func Base64toPng(data string, appId string) (out *model.ImageDTO) {
 	}
 
 	created := &model.ImageDTO{
-		OriginName: "default.png",
-		Reference:  config.Default.IMAGE_PATH,
+		OriginName: originName,
+		Reference:  config.Default.THAID_HOME,
 		Extension:  "png",
 	}
 	return created

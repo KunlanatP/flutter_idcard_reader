@@ -25,8 +25,8 @@ func IsEmpty(path string) (bool, error) {
 
 // Get the first 8 characters of AppID for create directory
 // ex. AppID = bb518165-9718-4d9b-843a-ffb246b6c9b1
-// >> .../FTD_HOME/FTD/builder/bb518165/{AppName}
-func SplitAppID(appId string) string {
+// >> .../THAID_HOME/FTD/builder/bb518165/{AppName}
+func SplitID(appId string) string {
 	splitted := strings.Split(appId, "-")
 	return splitted[0]
 }
