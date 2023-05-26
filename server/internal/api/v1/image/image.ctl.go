@@ -31,7 +31,7 @@ func (r *imageCtl) CreateImage(ctx *fiber.Ctx) (err error) {
 	query := dto.QueryUserAndPerson{}
 	ctx.QueryParser(&query)
 
-	file, err := ctx.FormFile("image")
+	file, err := ctx.MultipartForm()
 	if err != nil {
 		return err
 	}

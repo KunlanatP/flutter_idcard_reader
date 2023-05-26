@@ -19,7 +19,7 @@ import (
 )
 
 type ImageService interface {
-	CreateImage(ctx *fiber.Ctx, query dto.QueryUserAndPerson, file *multipart.FileHeader) (*domain.Image, error)
+	CreateImage(ctx *fiber.Ctx, query dto.QueryUserAndPerson, file *multipart.Form) ([]domain.Image, error)
 	GetByteOfImageFileById(ctx context.Context, id string) ([]byte, error)
 	GetImageById(ctx context.Context, id string) (*domain.Image, error)
 }
@@ -42,7 +42,8 @@ type imageServiceImpl struct {
 	imageRepo  repository.ImageRepository
 }
 
-func (s *imageServiceImpl) CreateImage(ctx *fiber.Ctx, query dto.QueryUserAndPerson, file *multipart.FileHeader) (*domain.Image, error) {
+func (s *imageServiceImpl) CreateImage(ctx *fiber.Ctx, query dto.QueryUserAndPerson, file *multipart.Form) ([]domain.Image, error) {
+
 	if _, err := s.userRepo.FindUserByID(ctx.Context(), query.UserID); err != nil {
 		return nil, err
 	}
@@ -60,21 +61,26 @@ func (s *imageServiceImpl) CreateImage(ctx *fiber.Ctx, query dto.QueryUserAndPer
 	if err := utils.ValidateDirectory(fullPath); err != nil {
 		log.Fatal(err)
 	}
-
-	name, extension := utils.GetFileNameExtension(file.Filename)
-	name = uuid.NewString()
-	if err := ctx.SaveFile(file, fmt.Sprintf("%s/%s%s", fullPath, name, extension)); err != nil {
-		return nil, err
+	datas := []domain.Image{}
+	for _, fileHeaders := range file.File {
+		for _, fileHeader := range fileHeaders {
+			name, extension := utils.GetFileNameExtension(fileHeader.Filename)
+			name = uuid.NewString()
+			if err := ctx.SaveFile(fileHeader, fmt.Sprintf("%s/%s%s", fullPath, name, extension)); err != nil {
+				return nil, err
+			}
+			datas = append(datas, domain.Image{
+				OriginName: name + extension,
+				Extension:  extension,
+				Reference:  dirPath,
+				Size:       fileHeader.Size,
+				UserID:     query.UserID,
+				PeopleID:   query.PeopleID,
+			})
+		}
 	}
 
-	return s.imageRepo.CreateImage(ctx.Context(), domain.Image{
-		OriginName: name + extension,
-		Extension:  extension,
-		Reference:  dirPath,
-		Size:       file.Size,
-		UserID:     query.UserID,
-		PeopleID:   query.PeopleID,
-	})
+	return s.imageRepo.CreateImage(ctx.Context(), datas)
 }
 
 func (s *imageServiceImpl) GetByteOfImageFileById(ctx context.Context, id string) ([]byte, error) {

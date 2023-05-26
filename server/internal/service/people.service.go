@@ -88,19 +88,19 @@ func (s *peopleServiceImpl) CreatePeople(ctx context.Context, data *model.Create
 		now := time.Now()
 		resImage := utils.Base64toPng(base64, dirPath, "profile-"+now.Format("20060201-15:04:05"), "jpeg")
 
-		img, err := s.imageRepo.CreateImage(ctx, domain.Image{
+		img, err := s.imageRepo.CreateImage(ctx, []domain.Image{{
 			OriginName: resImage.OriginName,
 			Extension:  resImage.Extension,
 			Reference:  resImage.Reference,
 			UserID:     user.ID,
 			PeopleID:   people.ID,
-		})
+		}})
 		if err != nil {
 			return nil, err
 		}
 
 		backendUrl := config.Default.BACKEND_URL
-		_imageUrl := fmt.Sprintf("%s/images/%s", backendUrl, img.ID)
+		_imageUrl := fmt.Sprintf("%s/images/%s", backendUrl, img[0].ID)
 
 		return s.peopleRepo.UpdatePeopleByID(ctx, people.ID, &domain.PeopleData{
 			ImageUrl: _imageUrl,

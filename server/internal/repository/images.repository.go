@@ -11,7 +11,7 @@ import (
 )
 
 type ImageRepository interface {
-	CreateImage(ctx context.Context, data domain.Image) (*domain.Image, error)
+	CreateImage(ctx context.Context, datas []domain.Image) (out []domain.Image, err error)
 	FindImageByID(ctx context.Context, id string) (*domain.Image, error)
 }
 
@@ -23,19 +23,22 @@ type imageRepository struct {
 	db *gorm.DB
 }
 
-func (r *imageRepository) CreateImage(ctx context.Context, data domain.Image) (*domain.Image, error) {
-	create := &entities.Image{
-		OriginName: data.OriginName,
-		Size:       data.Size,
-		Reference:  data.Reference,
-		Extension:  data.Extension,
-		UserID:     data.UserID,
-		PeopleID:   data.PeopleID,
+func (r *imageRepository) CreateImage(ctx context.Context, datas []domain.Image) (out []domain.Image, err error) {
+	for _, data := range datas {
+		create := &entities.Image{
+			OriginName: data.OriginName,
+			Size:       data.Size,
+			Reference:  data.Reference,
+			Extension:  data.Extension,
+			UserID:     data.UserID,
+			PeopleID:   data.PeopleID,
+		}
+		if err := r.db.Create(create).Error; err != nil {
+			return nil, err
+		}
+		out = append(out, *create.ToDomain())
 	}
-	if err := r.db.Create(create).Error; err != nil {
-		return nil, err
-	}
-	return create.ToDomain(), nil
+	return
 }
 
 func (r *imageRepository) FindImageByID(ctx context.Context, id string) (*domain.Image, error) {
