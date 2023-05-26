@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"image"
+	"image/jpeg"
 	"image/png"
 	"log"
 	"os"
@@ -14,30 +15,42 @@ import (
 	"github.com/KunlanatP/idcard-reader-server/internal/core/config"
 )
 
-func Base64toPng(data, dirPath, filename string) (out *model.ImageDTO) {
-
+func Base64toPng(data, dirPath, filename, extension string) (out *model.ImageDTO) {
+	fullPath := filepath.Join(
+		config.Default.LOCAL_PATH,
+		dirPath,
+	)
 	reader := base64.NewDecoder(base64.StdEncoding, strings.NewReader(data))
-	m, formatString, err := image.Decode(reader)
+
+	var img image.Image
+	var err error
+
+	switch extension {
+
+	case "jpeg":
+		img, err = jpeg.Decode(reader)
+	default:
+		img, err = png.Decode(reader)
+	}
+
 	if err != nil {
 		log.Fatal(err)
 	}
-	bounds := m.Bounds()
-	fmt.Println(bounds, formatString)
 
-	if err := ValidateDirectory(dirPath); err != nil {
+	if err := ValidateDirectory(fullPath); err != nil {
 		log.Fatal(err)
 	}
 
 	//Encode from image format to writer
-	originName := fmt.Sprintf("%s.%s", filename, formatString)
-	pngFilename := filepath.Join(dirPath, originName)
+	originName := fmt.Sprintf("%s.%s", filename, extension)
+	pngFilename := filepath.Join(fullPath, originName)
 	f, err := os.OpenFile(pngFilename, os.O_WRONLY|os.O_CREATE, 0777)
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
 
-	err = png.Encode(f, m)
+	err = png.Encode(f, img)
 	if err != nil {
 		log.Fatal(err)
 		return
@@ -45,8 +58,8 @@ func Base64toPng(data, dirPath, filename string) (out *model.ImageDTO) {
 
 	created := &model.ImageDTO{
 		OriginName: originName,
-		Reference:  config.Default.THAID_HOME,
-		Extension:  "png",
+		Reference:  dirPath,
+		Extension:  extension,
 	}
 	return created
 }

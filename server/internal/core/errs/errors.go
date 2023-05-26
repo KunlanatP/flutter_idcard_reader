@@ -60,7 +60,10 @@ func newError(code int, message []string) *Error {
 var ErrIDCardIsRequired = Invalid("ID-Card is required")
 var ErrMobileIsRequired = Invalid("Phone number is required")
 
-// var ErrPageIDIsRequired = Invalid("Page id is required")
+var ErrUserIDIsRequired = Invalid("User id is required")
+var ErrPeopleIDIsRequired = Invalid("People id is required")
+var ErrImageIDIsRequired = Invalid("Image id is required")
+
 // var ErrNameIsRequired = Invalid("Name is required")
 // var ErrFieldIsRequired = Invalid("This field is required")
 
@@ -69,9 +72,10 @@ var ErrInvalidRequestToSave = Invalid("invalid request to save")
 // var ErrIsDirEmpty = Invalid("Dir is empty.")
 
 // var ErrFuncHandlerIDIsRequired = Invalid("Function handler id is required")
-// var ErrFuncHandlerNotFound = NotFound("Function handler not found")
+var ErrPeopleNotFound = NotFound("People not found")
 
 // var ErrActionIDIsRequired = Invalid("Action id is required")
 var ErrUserNotFound = NotFound("User not found")
+var ErrImageNotFound = NotFound("Image not found")
 
 // var ErrDuplicateKeyValue = NotFound("duplicate key value violates unique constraint")

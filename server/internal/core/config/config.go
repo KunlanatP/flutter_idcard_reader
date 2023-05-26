@@ -12,6 +12,7 @@ type Config struct {
 	DB_MAX_POOL int    `env:"DB_MAX_POOL,required" envDefault:"50"`
 	LOCAL_PATH  string `env:"LOCAL_PATH"`
 	THAID_HOME  string `env:"THAID_HOME"`
+	BACKEND_URL string `env:"BACKEND_URL"`
 }
 
 // Default use to share config same instance without parse

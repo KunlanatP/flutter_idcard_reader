@@ -39,6 +39,6 @@ type QueryUser struct {
 }
 
 type QueryUserAndPerson struct {
-	UserID   string `query:"uid" json:"uid" validate:"required"`
-	PersonID string `query:"pid" json:"pid" validate:"required"`
+	UserID   string `query:"user" json:"user" validate:"required"`
+	PeopleID string `query:"people" json:"people" validate:"required"`
 }

@@ -72,8 +72,8 @@ func startCommandLine(cmd *cobra.Command, args []string) {
 	imageRepo := repository.WithGormImageRepository(db)
 
 	userServ := service.UserServiceImpl(userRepo)
-	peopleServ := service.PeopleServiceImpl(userRepo, peopleRepo)
-	imageServ := service.ImageServiceImpl(imageRepo)
+	peopleServ := service.PeopleServiceImpl(userRepo, peopleRepo, imageRepo)
+	imageServ := service.ImageServiceImpl(userRepo, peopleRepo, imageRepo)
 
 	v1Route.Mount("/", user.UserController(userServ))
 	v1Route.Mount("/", people.PeopleController(peopleServ))
