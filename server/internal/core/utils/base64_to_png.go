@@ -13,7 +13,17 @@ import (
 
 	"github.com/KunlanatP/idcard-reader-server/internal/api/v1/people/model"
 	"github.com/KunlanatP/idcard-reader-server/internal/core/config"
+	"github.com/google/uuid"
 )
+
+func CreateImage(userID, peopleID, base64 string) (resImage *model.ImageDTO) {
+	dirPath := filepath.Join(
+		config.Default.THAID_HOME,
+		SplitID(userID),
+		SplitID(peopleID),
+	)
+	return Base64toPng(base64, dirPath, uuid.NewString(), "jpeg")
+}
 
 func Base64toPng(data, dirPath, filename, extension string) (out *model.ImageDTO) {
 	fullPath := filepath.Join(

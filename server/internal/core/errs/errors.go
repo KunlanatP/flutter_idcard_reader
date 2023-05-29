@@ -77,5 +77,6 @@ var ErrPeopleNotFound = NotFound("People not found")
 // var ErrActionIDIsRequired = Invalid("Action id is required")
 var ErrUserNotFound = NotFound("User not found")
 var ErrImageNotFound = NotFound("Image not found")
+var ErrLocationNotFound = NotFound("Location not found")
 
 // var ErrDuplicateKeyValue = NotFound("duplicate key value violates unique constraint")

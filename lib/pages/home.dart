@@ -78,9 +78,11 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          // builder: (context) => ReadCardPage(position: _position),
+                          // builder: (context) => ReadCardPage(
+                          //   position: _position,
+                          // ),
                           builder: (context) => IDCardDetailPage(
-                            thaiIDCard: mockData,
+                            thaiIDCard: mockPeopleData,
                             position: _position,
                           ),
                           // builder: (context) => const PhoneFormatPage(),

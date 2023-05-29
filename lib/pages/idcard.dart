@@ -113,7 +113,7 @@ class _IDCardPageState extends State<IDCardPage> {
                   color: Colors.grey.withAlpha(125),
                 ),
                 child: IconButton(
-                  onPressed: () {
+                  onPressed: () async {
                     Navigator.push(
                       context,
                       MaterialPageRoute(

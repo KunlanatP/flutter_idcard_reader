@@ -57,3 +57,17 @@ type ImageDTO struct {
 	Extension  string `json:"extension" validate:"required"`
 	Reference  string `json:"reference" validate:"required"`
 }
+
+type UpdatePeopleDTO struct {
+	TitleTH     string `json:"titleTH" validate:"omitempty"`
+	FirstnameTH string `json:"firstnameTH" validate:"omitempty"`
+	LastnameTH  string `json:"lastnameTH" validate:"omitempty"`
+	TitleEN     string `json:"titleEN" validate:"omitempty"`
+	FirstnameEN string `json:"firstnameEN" validate:"omitempty"`
+	LastnameEN  string `json:"lastnameEN" validate:"omitempty"`
+	Address     string `json:"address" validate:"omitempty"`
+	IssueDate   string `json:"issueDate" validate:"omitempty"`
+	ExpireDate  string `json:"expireDate" validate:"omitempty"`
+	Photo       string `json:"photo" validate:"omitempty"`
+	Mobile      string `json:"mobile" validate:"omitempty"`
+}

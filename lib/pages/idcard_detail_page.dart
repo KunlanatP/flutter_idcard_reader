@@ -5,8 +5,6 @@ import 'package:drop_shadow/drop_shadow.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_idcard_reader/models/model.dart';
-import 'package:flutter_idcard_reader/services/shared_service.dart';
 import 'package:flutter_idcard_reader/themes/colors.dart';
 import 'package:flutter_idcard_reader/utils/format_date.dart';
 import 'package:flutter_idcard_reader/utils/gender_convert.dart';
@@ -20,7 +18,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:thai_idcard_reader_flutter/thai_idcard_reader_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../constants/mock_data.dart';
 import '../models/location_model.dart';
+import '../models/model.dart';
 import '../models/people_model.dart';
 import '../validate/phone_formatter.dart';
 
@@ -310,43 +310,48 @@ class _IDCardDetailPageState extends State<IDCardDetailPage> {
                     width: constraints.maxWidth < 390 ? width : 390,
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        showDialogConfirm(
-                          language.txt_do_you_want_to_save_it,
-                          context,
-                          () async {
-                            final _result = await SharedService.loginDetails();
-                            var personData = ThaiIDCard().toResponse(
-                              idCard: widget.thaiIDCard,
-                              mobilePhone: _mobileTxt.text.replaceAll('-', ''),
-                            );
-                            final newData = IDCardDetailModel(
-                              userNationID: _result?.idCard,
-                              personData: PeopleModel(
-                                nationID: personData.cid,
-                                titleTH: personData.titleTH,
-                                firstnameTH: personData.firstnameTH,
-                                lastnameTH: personData.lastnameTH,
-                                titleEN: personData.titleEN,
-                                firstnameEN: personData.firstnameEN,
-                                lastnameEN: personData.lastnameEN,
-                                address: personData.address,
-                                birthdate: personData.birthdate,
-                                issueDate: personData.issueDate,
-                                expireDate: personData.expireDate,
-                                gender: personData.gender,
-                                photo: base64.encode(personData.photo),
-                                mobile: personData.mobile,
-                              ),
-                              location: LocationModel(
-                                latitude: widget.position!.latitude,
-                                longitude: widget.position!.longitude,
-                              ),
-                            );
-                            debugPrint(jsonEncode(newData));
-                            // debugPrint('${imageFileList?.length}');
-                            Navigator.of(context).pop();
-                          },
-                        );
+                        // final userData = mockUserData;
+                        // var personData = ThaiIDCard().toResponse(
+                        //   idCard: widget.thaiIDCard,
+                        //   mobilePhone: _mobileTxt.text.replaceAll('-', ''),
+                        // );
+
+                        // final newData = IDCardDetailModel(
+                        //   userNationID: userData.idCard,
+                        //   personData: PeopleModel(
+                        //     nationID: personData.cid,
+                        //     titleTH: personData.titleTH,
+                        //     firstnameTH: personData.firstnameTH,
+                        //     lastnameTH: personData.lastnameTH,
+                        //     titleEN: personData.titleEN,
+                        //     firstnameEN: personData.firstnameEN,
+                        //     lastnameEN: personData.lastnameEN,
+                        //     address: personData.address,
+                        //     birthdate: personData.birthdate,
+                        //     issueDate: personData.issueDate,
+                        //     expireDate: personData.expireDate,
+                        //     gender: personData.gender,
+                        //     photo: base64.encode(
+                        //       MemoryImage(
+                        //         Uint8List.fromList(personData.photo),
+                        //       ).bytes,
+                        //     ),
+                        //     mobile: personData.mobile,
+                        //   ),
+                        //   location: LocationModel(
+                        //     latitude: widget.position!.latitude,
+                        //     longitude: widget.position!.longitude,
+                        //   ),
+                        // );
+
+                        // print(jsonEncode(newData));
+                        // showDialogConfirm(
+                        //   language.txt_do_you_want_to_save_it,
+                        //   context,
+                        //   () async {
+                        //     Navigator.of(context).pop();
+                        //   },
+                        // );
                       },
                       icon: const FaIcon(FontAwesomeIcons.floppyDisk),
                       label: const Text('บันทึก'),

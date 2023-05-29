@@ -277,6 +277,7 @@ class ThaiIDCard {
       issueDate: idCard?.issueDate,
       expireDate: idCard?.expireDate,
       gender: idCard?.gender,
+      photo: idCard?.photo ?? [],
       mobile: mobilePhone,
     );
   }

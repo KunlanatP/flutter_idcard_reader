@@ -60,7 +60,7 @@ class _MyAppState extends State<MyApp> {
       supportedLocales: AppLocalizations.supportedLocales,
       locale: _locale,
       home: _detailHome,
-      // home: IDCardDetailPage(thaiIDCard: mockData),
+      // home: IDCardDetailPage(thaiIDCard: mockPeopleData),
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/home':

@@ -1,5 +1,7 @@
 package dto
 
+import "net/http"
+
 type ErrorMessage struct {
 	Message string `json:"message"`
 }
@@ -13,4 +15,12 @@ func ReplyError(message string) ErrorReply {
 			Message: message,
 		},
 	}
+}
+
+type StatusReply struct {
+	Status interface{} `json:"status"`
+}
+
+func ReplyStatus(status int) *StatusReply {
+	return &StatusReply{Status: http.StatusText(status)}
 }

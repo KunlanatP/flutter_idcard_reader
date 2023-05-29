@@ -1,12 +1,12 @@
-
 import 'package:dio/dio.dart';
-import 'package:flutter_idcard_reader/models/error_model.dart';
-import 'package:flutter_idcard_reader/models/pageable_with_search.dart';
-import 'package:flutter_idcard_reader/models/user_model.dart';
-import 'package:flutter_idcard_reader/repositorys/user_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../constants/mock_data.dart';
+import '../models/error_model.dart';
 import '../models/login_model.dart';
+import '../models/pageable_with_search.dart';
+import '../models/user_model.dart';
+import '../repositorys/user_repository.dart';
 import '../services/http.dart';
 import '../services/shared_service.dart';
 
@@ -17,7 +17,7 @@ AutoDisposeStateProvider<AsyncValue<Pagination<List<UserModel>>?>> usersList =
 
 AutoDisposeStateProvider<UserModel?> currentUser =
     StateProvider.autoDispose<UserModel?>((ref) {
-  return null;
+  return mockUserData;
 });
 
 AutoDisposeStateProvider<AppError?> errorState =
@@ -31,9 +31,9 @@ final userRepositoryProvider =
 final userController = Provider.autoDispose((ref) => UserController(ref));
 
 class UserController {
-  final Ref _read;
+  final Ref _ref;
 
-  UserController(this._read);
+  UserController(this._ref);
 
   Future<void> init() async {
     await fetchAllUsers(0, 15, '');
@@ -43,23 +43,23 @@ class UserController {
 
   Future<void> fetchAllUsers(int offset, int limit, String name) async {
     try {
-      final out = await _read.read(userRepositoryProvider).getAllUsers(
+      final out = await _ref.read(userRepositoryProvider).getAllUsers(
           PageableWithSearch(offset: offset, limit: limit, search: name));
-      _read.read(usersList.notifier).state = AsyncValue.data(out);
+      _ref.read(usersList.notifier).state = AsyncValue.data(out);
     } on DioError catch (err) {
-      _read.read(errorState.notifier).state =
-          AppError.fromJson(err.response?.data);
-      _read.read(usersList.notifier).state = AsyncValue.error(err);
+      _ref.read(errorState.notifier).state =
+          AppError(ErrorMessage('${err.message}'));
+      _ref.read(usersList.notifier).state = AsyncValue.error(err);
     }
   }
 
   Future<void> loginUsers(LoginModel model) async {
     try {
-      final out = await _read.read(userRepositoryProvider).userLogin(model);
+      final out = await _ref.read(userRepositoryProvider).userLogin(model);
       SharedService.setLoginDetails(out);
-      _read.read(currentUser.notifier).state = out;
+      _ref.read(currentUser.notifier).state = out;
     } on DioError catch (err) {
-      _read.read(errorState.notifier).state =
+      _ref.read(errorState.notifier).state =
           AppError.fromJson(err.response?.data);
     }
   }

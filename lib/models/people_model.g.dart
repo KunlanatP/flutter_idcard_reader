@@ -19,8 +19,8 @@ PeopleModel _$PeopleModelFromJson(Map<String, dynamic> json) => PeopleModel(
       issueDate: json['issueDate'] as String?,
       expireDate: json['expireDate'] as String?,
       gender: json['gender'] as int?,
-      photo: json['photo'] as String?,
       mobile: json['mobile'] as String?,
+      photo: json['photo'] as String?,
     );
 
 Map<String, dynamic> _$PeopleModelToJson(PeopleModel instance) =>
@@ -37,6 +37,6 @@ Map<String, dynamic> _$PeopleModelToJson(PeopleModel instance) =>
       'issueDate': instance.issueDate,
       'expireDate': instance.expireDate,
       'gender': instance.gender,
-      'photo': instance.photo,
       'mobile': instance.mobile,
+      'photo': instance.photo,
     };

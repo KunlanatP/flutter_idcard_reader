@@ -18,6 +18,7 @@ type UserRepository interface {
 	CreateUser(ctx context.Context, data *domain.User) (*domain.User, error)
 	FindUserByIdCardAndMobile(ctx context.Context, query dto.QueryUser) (*domain.User, error)
 	FindUserByIdCard(ctx context.Context, idCard string) (*domain.User, error)
+	DeleteUserByID(ctx context.Context, id string) error
 }
 
 func WithGormUserRepository(db *gorm.DB) UserRepository {
@@ -94,4 +95,13 @@ func (r *userRepository) FindUserByIdCard(ctx context.Context, idCard string) (*
 		}
 	}
 	return user.ToDomain(), nil
+}
+
+func (r *userRepository) DeleteUserByID(ctx context.Context, id string) error {
+	return r.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Delete(&entities.User{}, "id=?", id).Error; err != nil {
+			return err
+		}
+		return nil
+	})
 }

@@ -14,7 +14,9 @@ import (
 type PeopleRepository interface {
 	CreatePeople(ctx context.Context, data *domain.People) (*domain.PeopleOutput, error)
 	FindPeopleByID(ctx context.Context, id string) (*domain.PeopleOutput, error)
+	GetPeopleByIDCard(ctx context.Context, idcard string) (*domain.PeopleOutput, error)
 	UpdatePeopleByID(ctx context.Context, id string, data *domain.PeopleData) (*domain.PeopleOutput, error)
+	DeletePeopleByID(ctx context.Context, id string) error
 }
 
 func WithGormPeopleRepository(db *gorm.DB) PeopleRepository {
@@ -59,10 +61,30 @@ func (r *peopleRepository) FindPeopleByID(ctx context.Context, id string) (*doma
 	return people.ToDomain(), nil
 }
 
+func (r *peopleRepository) GetPeopleByIDCard(ctx context.Context, idcard string) (*domain.PeopleOutput, error) {
+	people := &entities.People{}
+	if err := r.db.First(people, "nation_id=?", idcard).Error; err != nil {
+		if errors.Is(gorm.ErrRecordNotFound, err) {
+			return nil, errs.ErrPeopleNotFound
+		}
+	}
+	return people.ToDomain(), nil
+}
+
 func (r *peopleRepository) UpdatePeopleByID(ctx context.Context, id string, data *domain.PeopleData) (*domain.PeopleOutput, error) {
 	tx := r.db.Begin()
 	updater := entities.People{
-		ImageUrl: data.ImageUrl,
+		TitleTH:     data.TitleTH,
+		FirstnameTH: data.FirstnameTH,
+		LastnameTH:  data.LastnameTH,
+		TitleEN:     data.TitleEN,
+		FirstnameEN: data.FirstnameEN,
+		LastnameEN:  data.LastnameEN,
+		Address:     data.Address,
+		IssueDate:   data.IssueDate,
+		ExpireDate:  data.ExpireDate,
+		Mobile:      data.Mobile,
+		ImageUrl:    data.ImageUrl,
 	}
 	updated := tx.Model(&updater).Where("id=?", id).Updates(updater)
 	if err := updated.Error; err != nil {
@@ -79,4 +101,16 @@ func (r *peopleRepository) UpdatePeopleByID(ctx context.Context, id string, data
 	tx.Commit()
 	log.Debug("updater:id:", updater.ID, updater.ToDomain().ID)
 	return updater.ToDomain(), nil
+}
+
+func (r *peopleRepository) DeletePeopleByID(ctx context.Context, id string) error {
+	return r.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Delete(&entities.People{}, "id=?", id).Error; err != nil {
+			return err
+		}
+		if err := tx.Delete(&entities.Location{}, "people_id=?", id).Error; err != nil {
+			return err
+		}
+		return nil
+	})
 }

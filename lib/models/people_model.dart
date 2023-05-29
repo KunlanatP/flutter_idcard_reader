@@ -19,8 +19,8 @@ class PeopleModel {
   String? issueDate;
   String? expireDate;
   int? gender;
-  String? photo; //base64
   String? mobile;
+  String? photo; //base64
 
   PeopleModel({
     this.nationID,
@@ -35,8 +35,8 @@ class PeopleModel {
     this.issueDate,
     this.expireDate,
     this.gender,
-    this.photo,
     this.mobile,
+    this.photo,
   });
 
   factory PeopleModel.fromJson(Map<String, dynamic> json) =>
@@ -57,8 +57,8 @@ class PeopleModel {
       'issueDate': issueDate,
       'expireDate': expireDate,
       'gender': gender,
-      'photo': photo,
       'mobile': mobile,
+      'photo': photo,
     };
   }
 }

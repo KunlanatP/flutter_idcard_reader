@@ -1,9 +1,9 @@
 package domain
 
 type People struct {
-	UserID     string      `json:"userId"`
-	PeopleData *PeopleData `json:"personData"`
-	Location   *Location   `json:"location"`
+	UserID       string        `json:"userId"`
+	PeopleData   *PeopleData   `json:"personData"`
+	LocationData *LocationData `json:"location"`
 }
 
 type PeopleData struct {
@@ -23,7 +23,7 @@ type PeopleData struct {
 	Mobile      string `json:"mobile"`
 }
 
-type Location struct {
+type LocationData struct {
 	Latitude  float64 `json:"latitude"`
 	Longitude float64 `json:"longitude"`
 }

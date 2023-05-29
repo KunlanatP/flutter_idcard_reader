@@ -15,6 +15,7 @@ func ImageController(serv service.ImageService) *fiber.App {
 	imagesRoute.Post("/images", ctl.CreateImage)
 	imagesRoute.Get("/images/read/:id", ctl.GetImageById)
 	imagesRoute.Get("/images/:id", ctl.GetByteOfImageFileById)
+	imagesRoute.Get("/images/profiles/:id", ctl.GetByteOfImageProfileFileById)
 
 	return imagesRoute
 }
@@ -46,6 +47,16 @@ func (r *imageCtl) CreateImage(ctx *fiber.Ctx) (err error) {
 func (r *imageCtl) GetByteOfImageFileById(ctx *fiber.Ctx) (err error) {
 	id := ctx.Params("id")
 	images, err := r.svc.GetByteOfImageFileById(ctx.Context(), id)
+	if err != nil {
+		return err
+	}
+	ctx.Set("Content-Type", "image/png")
+	return ctx.Status(fiber.StatusOK).Send(images)
+}
+
+func (r *imageCtl) GetByteOfImageProfileFileById(ctx *fiber.Ctx) (err error) {
+	id := ctx.Params("id")
+	images, err := r.svc.GetByteOfImageProfileFileById(ctx.Context(), id)
 	if err != nil {
 		return err
 	}

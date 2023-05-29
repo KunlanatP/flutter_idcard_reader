@@ -14,7 +14,9 @@ func AutoMigrate(db *gorm.DB) {
 	migrateList := []interface{}{
 		&entities.User{},
 		&entities.People{},
-		&entities.Image{},
+		&entities.ImageProfile{},
+		&entities.Images{},
+		&entities.Location{},
 	}
 	if err := db.AutoMigrate(migrateList...); err != nil {
 		log.Errorf("Can't automigrate schema %v", err)

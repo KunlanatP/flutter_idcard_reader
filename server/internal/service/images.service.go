@@ -21,6 +21,7 @@ import (
 type ImageService interface {
 	CreateImage(ctx *fiber.Ctx, query dto.QueryUserAndPerson, file *multipart.Form) ([]domain.Image, error)
 	GetByteOfImageFileById(ctx context.Context, id string) ([]byte, error)
+	GetByteOfImageProfileFileById(ctx context.Context, id string) ([]byte, error)
 	GetImageById(ctx context.Context, id string) (*domain.Image, error)
 }
 
@@ -80,7 +81,7 @@ func (s *imageServiceImpl) CreateImage(ctx *fiber.Ctx, query dto.QueryUserAndPer
 		}
 	}
 
-	return s.imageRepo.CreateImage(ctx.Context(), datas)
+	return s.imageRepo.CreateImages(ctx.Context(), datas)
 }
 
 func (s *imageServiceImpl) GetByteOfImageFileById(ctx context.Context, id string) ([]byte, error) {
@@ -88,6 +89,26 @@ func (s *imageServiceImpl) GetByteOfImageFileById(ctx context.Context, id string
 		return nil, errs.ErrImageIDIsRequired
 	}
 	data, err := s.imageRepo.FindImageByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	pathImage := filepath.Join(
+		config.Default.LOCAL_PATH,
+		data.Reference,
+		data.OriginName,
+	)
+	reader, err := os.ReadFile(pathImage)
+	if err != nil {
+		return nil, err
+	}
+	return reader, nil
+}
+
+func (s *imageServiceImpl) GetByteOfImageProfileFileById(ctx context.Context, id string) ([]byte, error) {
+	if len(id) == 0 {
+		return nil, errs.ErrImageIDIsRequired
+	}
+	data, err := s.imageRepo.FindImageProfileByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
